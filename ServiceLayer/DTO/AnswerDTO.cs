@@ -11,6 +11,6 @@ namespace ServiceLayer.DTO
         public int Id { get; set; }
         public string Value { get; set; }
         public int QuestionId { get; set; }
-        public IEnumerable<VoteDTO> Votes { get; set; }
+        //public IEnumerable<VoteDTO> Votes { get; set; }
     }
 }

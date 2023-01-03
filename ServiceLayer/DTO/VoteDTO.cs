@@ -9,7 +9,7 @@ namespace ServiceLayer.DTO
     public class VoteDTO
     {
         public int Id { get; set; }
-        public AnswerDTO Answer { get; set; }
-        public ParticipantDTO Participants { get; set; }
+        public int AnswerId { get; set; }
+        public ParticipantDTO? Participant { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace ServiceLayer.DTO
         public string Title { get; set; }
         public string Type { get; set; }
         public int FormId { get; set; }
-        public IEnumerable<AnswerDTO> Answers { get; set; }
-        public IEnumerable<VoteDTO> Votes { get; set; }
+        public IEnumerable<AnswerDTO>? Answers { get; set; }
+        public IEnumerable<VoteDTO>? Votes { get; set; }
     }
 }

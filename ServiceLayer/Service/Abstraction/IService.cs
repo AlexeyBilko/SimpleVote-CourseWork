@@ -13,6 +13,7 @@ namespace ServiceLayer.Service.Abstraction
     {
         Task<T2> AddAsync(T2 entity);
         Task<T2> DeleteAsync(T2 entity);
+        Task<T2> DeleteById(TKey id);
         Task<T2> UpdateAsync(T2 entity);
         Task<IEnumerable<T2>> GetAllAsync();
         Task<T2> GetAsync(int id);
