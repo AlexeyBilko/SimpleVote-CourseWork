@@ -1,7 +1,30 @@
+using LeadSub.Models;
+using ServiceLayer.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var emailConfig = builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+string str = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddAppDbContext(str);
+builder.Services.AddRepositoryDependencies();
+builder.Services.AddServicesDependencies();
+
+string identityConnection = builder.Configuration.GetConnectionString("IdentityConnection");
+builder.Services.ConfigureIdentityOptions(identityConnection);
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => {
+
+    //options.IdleTimeout = TimeSpan.FromSeconds(40);
+
+});
 
 var app = builder.Build();
 
@@ -13,11 +36,18 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

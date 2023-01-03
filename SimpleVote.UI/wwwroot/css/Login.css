@@ -1,0 +1,179 @@
+﻿body {
+    background-color: #FFF;
+    background-image: radial-gradient(#dbdbff 2px, transparent 2px);
+    background-size: 62px 62px;
+    background-color: #ffffff;
+}
+
+/*.background {
+    width: 430px;
+    height: 520px;
+    position: relative;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+}
+
+    .background .shape {
+        height: 200px;
+        width: 200px;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+.shape:first-child {
+    background: linear-gradient( to right, #3362DB, #224AAF );
+    right: -50px;
+    top: -30px;
+    bottom: 0px;
+    backdrop-filter: blur(20px);s
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}*/
+
+form {
+    width: 30%;
+    margin: auto;
+    position: fixed;
+    top: 44%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1250px) {
+    form {
+        width: 44%;
+    }
+}
+
+@media (max-width: 700px) {
+    form {
+        width: 80%;
+    }
+}
+
+.form-border {
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 20px;
+    background: #FFF;
+    border-radius: 24px;
+}
+
+.login-links{
+    margin-top: 30px;
+
+}
+
+.login-links div{
+    margin: 10px;
+}
+
+form * {
+    font-family: 'Roboto',sans-serif;
+    color: black;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+
+    form h3 {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 42px;
+        text-align: center;
+    }
+    @media(max-width:330px){            /*чтобы не вылазил за границы формы*/
+        form h3 {
+            font-size: 26px;
+        }
+    }
+
+label {
+    display: block;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+input {
+    display: block;
+    height: 50px;
+    width: 100%;
+    margin-top:10px;
+    background: #FFF;
+    border-radius: 34px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    border-radius: 24px;
+    padding: 0 15px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+::placeholder {
+    color: #D2D0D0;
+}
+
+
+.button-login {
+    margin-top: 40px;
+    width: 100%;
+    background-color: #3362DB;
+    color: #ffffff;
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 18px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    /*background: #3362DB;*/
+    background: linear-gradient( to right, #3362DB, #224AAF );
+    transition: 0.65s;
+}
+
+    .button-login:hover,
+    .button-login:active {
+        border-radius: 34px;
+        transition: 0.65s;
+    }
+
+    .social {
+        margin-top: 30px;
+        display: flex;
+    }
+
+    .social div {
+        background: red;
+        width: 150px;
+        border-radius: 3px;
+        padding: 5px 10px 10px 5px;
+        background-color: rgba(255,255,255,0.27);
+        color: #eaf0fb;
+        text-align: center;
+    }
+
+        .social div:hover {
+            background-color: rgba(255,255,255,0.47);
+        }
+
+    .social .fb {
+        margin-left: 25px;
+    }
+
+    .social i {
+        margin-right: 4px;
+    }
+
+.link {
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    color: #3362DB;
+}

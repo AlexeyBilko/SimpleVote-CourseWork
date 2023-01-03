@@ -7,18 +7,13 @@ using RepositoryLayer.Repository;
 using ServiceLayer.DTO;
 using ServiceLayer.Service.Abstraction;
 using ServiceLayer.Service.Realization;
+using ServiceLayer.Service.Realization.IdentityServices;
+using ServiceLayer.Services.IdentityServices;
 
 namespace ServiceLayer.Extensions
 {
     public static class AddProvidersExtensions
     {
-        public static void AddApplicationDbContext(this IServiceCollection services, string connectionStr)
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseSqlServer(connectionStr);
-            });
-        }
         public static void ConfigureIdentityOptions(this IServiceCollection services, string connectionStr)
         {
             services.Configure<IdentityOptions>(options =>
@@ -55,6 +50,12 @@ namespace ServiceLayer.Extensions
 
             services.AddScoped<IVoteService, VoteService>();
             services.AddScoped<VoteService, VoteService>();
+
+            services.AddScoped<UserService, UserService>();
+            services.AddScoped<SignInService, SignInService>();
+            services.AddScoped<RoleService, RoleService>();
+
+            services.AddTransient<DbContext, ApplicationDbContext>();
         }
     }
 }

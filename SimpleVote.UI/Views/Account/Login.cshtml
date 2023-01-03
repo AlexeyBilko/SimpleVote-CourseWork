@@ -1,0 +1,38 @@
+﻿@model SimpleVote.UI.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "/Views/Shared/FormLayout.cshtml";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/mainpage.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/Login.css" rel="stylesheet" />
+</head>
+@await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")
+<div class="container-fluid col-xl-5">
+
+    <form method="post" asp-controller="Account" asp-action="Login" class="mt-5">
+        <div class="form-border">
+            <h3>Login</h3>
+
+            <label asp-validation-for="Email">Email</label>
+            <input type="email" asp-for="Email" placeholder="Your Email" />
+            <span asp-validation-for="Email" class="text-danger fw-bold d-block"></span>
+
+            <label asp-validation-for="Password">Password</label>
+            <input type="password" asp-for="Password" placeholder="Your Password" />
+            <span asp-validation-for="Password" class="text-danger fw-bold d-block"></span>
+
+            <input class="button-login"type="submit" value="Log In" />
+        </div>
+        <div class="login-links">    
+            <div><a class="link" href="~/Account/Register">Create New Account</a></div>
+            @*add*@<div><a class="link" asp-action="EnterEmail" asp-controller="Account">I forgot my password</a></div>
+        </div>
+    </form>
+    <div class="text-danger mt-3 fw-bold d-block" asp-validation-summary="ModelOnly"></div>
+</div>

@@ -1,0 +1,27 @@
+﻿@if (!String.IsNullOrEmpty(TempData["Message"]?.ToString())) {
+    <head>
+        <link rel="stylesheet" href="~/css/modalMessage.css"/>
+    </head>
+    <div class="modal activate-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-header">Attention!</h5>
+                    <button type="button" class="close-btn mb-3" id="close-btn" onclick="closeModalWindow(this)">X</button>
+                </div>
+                <div class="modal-body">
+                    <p class="ms-3">@TempData["Message"]</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="ok-button mx-auto" onclick="closeModalWindow(this)">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function closeModalWindow(e){
+            let modal=document.querySelector('.modal.activate-modal')
+            modal.className="modal"
+        }
+    </script>
+}

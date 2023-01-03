@@ -1,0 +1,602 @@
+﻿body {
+    width: 100%;
+    margin-top:50px;
+}
+
+/*.nav {
+    max-width: 1720px;
+    margin: 0 auto;
+
+    display: grid;
+}*/
+
+/*a {
+    text-decoration: none;
+    text-align: center;
+}*/
+
+.main-menu-item {
+ 
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 51px;
+    color: black;
+
+    text-align:center;
+    margin-top:auto;
+    margin-bottom:auto;
+}
+
+   
+
+.main-logo, main-logo:hover {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 36px;
+    margin: 0px;
+    color: inherit !important;
+    color: #000000;
+}
+
+/*.main-logo:hover{
+    font-size: 38px;
+   
+}*/
+
+
+.top-main-button { 
+    min-width: 180px;
+    height: 60px;
+    max-height: 60px;
+    background: #3362DB;
+    border-radius: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    margin-left: 155px;
+    transition: 0.65s;
+}
+
+.top-main-button-ukr {
+    margin-left: 100px !important;
+}
+
+.top-main-button-auth {
+    margin-left: 78px !important;
+}
+
+.top-main-button-auth-ukr {
+    margin-left: 37px !important;
+}
+
+
+.main-button-text {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.top-main-button:hover,
+.top-main-button:active {
+    background: #FFFFFF !important;
+    color: #3362DB !important;
+    transition: 0.65s;
+}
+
+/*@media (min-width: 600px) {
+    .nav {
+        grid-template-columns: repeat(3, 1fr);
+        text-align: center;
+    }
+}
+
+@media (min-width: 1200px) {
+    .nav {
+        grid-template-columns: 1fr 4fr 1fr;
+    }
+}*/
+/*
+    .main-button-text:hover {
+        color: #FFFFFF;
+        font-size: 20px;
+    }*/
+
+.main-text{
+    width: 100%;
+}
+
+.front-message {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    max-width: 100%;
+    margin-left: auto;
+    margin-top: 100px;
+    align-items: center;
+}
+
+@media (max-width: 880px) {
+
+    .top-main-button-ukr {
+        margin-left:0px !important;
+    }
+
+    .front-message {
+        grid-template-columns: repeat(1, 1fr);
+        margin-top: 10px;
+    }
+
+    .how_work_steps{
+        margin: 4px !important;
+    }
+
+    .front-message-text {
+        margin: 44px !important;
+    }
+
+    .center-main-button {
+        margin: auto;
+    }
+
+    .step-title {
+        font-size: 22px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .step-text {
+        font-size: 14px !important;
+    }
+
+    .step-number {
+        font-size: 28px !important;
+    }
+
+    .step-image img{
+        width: 50% !important;
+    }
+
+    .who-benefit-list {
+        padding: 30px !important;
+        width: 70% !important;
+        margin-top: 40px !important;
+        margin: 0 auto;
+        margin-bottom: -41px !important;
+
+    }
+
+    .who-benefit-list div {
+        font-size: 16px !important;
+    }
+
+    .who-benefit-image{
+        margin-top: -23px;
+    }
+
+    .who-benefit-image img {
+        width: 80% !important;
+    }
+
+    .who-benefit-desc {
+        margin-top: 64px !important;
+        width: 90%;
+    }
+
+    .who-benefit-text {
+        font-size: 18px !important;
+    }
+
+    .price-desc {
+        width: 81% !important;
+        padding: 10px;
+    }
+
+    .pricing {
+        margin-bottom: 64px !important;
+    }
+
+
+
+    .who-benefit-visual {
+        grid-template-columns: 1fr !important;
+    }
+
+
+
+
+
+
+
+
+    .faq-block {
+        grid-template-columns: repeat(1, 1fr) !important;
+        padding: 20px !important;
+        margin-top: -50px !important;
+    }
+
+    .answer {
+        margin-top: -10px !important;
+    }
+
+    .arrow img{
+        width: 14% !important;
+    }
+}
+
+.front-message-text {
+    display: grid;
+    text-align: left;
+    margin:100px;
+}
+
+    .front-message-text h1 {
+        font-family: 'Arial';
+        font-style: normal;
+        font-weight: 900;
+        font-size: 24px;
+        margin-bottom: 40px;
+    }
+
+    .front-message-text div {
+        font-family: 'Arial';
+        font-style: normal;
+        font-weight: 900;
+        font-size: 15px;
+    }
+
+.center-main-button {
+    min-width: 80px !important;
+    max-width: 200px !important;
+    min-height: 70px !important;
+    max-height: 100px;
+    background: #3362DB;
+    border-radius: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 40px !important;
+    transition: 0.65s;
+}
+
+.center-main-button-text {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 20px;
+    color: #FFFFFF;
+}
+
+.center-main-button:hover,
+.center-main-button:active {
+    background: #FFFFFF;
+    color: #3362DB !important;
+    transition: 0.65s;
+}
+
+.center-main-button-text:hover {
+    font-size: 21px;
+}
+
+.front-message-image {
+    width: 100%;
+}
+
+.front-message-image img {
+    max-width: 80%;
+}
+
+.curved-line {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    text-align: center;
+}
+
+    .curved-line img {
+        z-index: 0;
+        min-height: 100%;
+
+        width: 100%;
+        height: auto;
+    }
+
+.block-title h2 {
+    text-align: center;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+
+.how_work_steps {
+    text-align: center;
+    margin: 80px;
+}
+
+.step {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.arrow{
+    text-align: center;
+    margin: 31px;
+}
+
+.arrow img {
+    z-index: 0;
+    width: 5%;
+    height: auto;
+}
+
+.text {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.step-image {
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .step-image img {
+        width: 30%;
+    }
+
+.step-number {
+    font-family: 'Arial';
+    font-style: normal;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 900;
+    font-size: 42px;
+    color: #757575;
+}
+
+.step-title {
+    font-family: 'Arial';
+    display: inline-flex;
+    align-items: center;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 28px;
+    color: #3362DB;
+    text-align: left !important;
+}
+
+.step-text {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    color: #000000;
+    text-align: left !important;
+}
+
+.line {
+    text-align: center;
+    height: 3px;
+    background: #3362DB;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.footer-line {
+    text-align: center;
+    height: 3px;
+    background: #3362DB;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+
+
+    .who-benefit-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+.who-benefit-image {
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .who-benefit-image img {
+        width: 50% !important;
+    }
+
+.who-benefit-list {
+    width: 70%;
+    padding: 30px;
+    background: #3362DB;
+    border-radius: 46px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 15px rgba(0,0,0,.2);
+}
+
+    .who-benefit-list div {
+        font-family: 'Arial';
+        font-style: normal;
+        font-weight: 800;
+        font-size: 22px;
+        color: #FFFFFF;
+        justify-content: center;
+        align-items: center;
+    }
+
+.who-benefit-desc {
+    margin-top: 120px !important;
+    text-align: center !important;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.who-benefit-text {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 22px;
+    color: #000000;
+}
+
+.pricing {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 120px;
+}
+
+.price {
+    margin-top: -50px;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 64px;
+    color: #288A26;
+    text-align: center;
+}
+
+.price-desc {
+    display: inline-flex;
+    width: 30% !important;
+    font-family: 'Arial';
+    margin: 30px;
+    background: #A7A7A7;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    color: #FFFFFF;
+    border-radius: 24px;
+}
+
+.price-bonuses {
+    text-align: center;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    color: #000000;
+}
+
+
+.price-bonuses-desc {
+    font-family: 'Arial';
+    font-style: normal;
+    font-size: 14px;
+    color: #000000;
+}
+
+.price-button {
+    width: 300px;
+    max-width: 300px;
+    height: 100px;
+    max-height: 60px;
+    background: #3362DB;
+    border-radius: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.faq-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 25px;
+}
+
+    .faq-block div {
+        margin: 20px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+.question {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    color: #000000;
+}
+
+.use-button {
+    min-width: 240px;
+    height: 50px;
+    max-height: 44px;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background: #3362DB;
+    border-radius: 14px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    color: #FFFFFF;
+    transition: 0.65s;
+    margin-top: 40px;
+}
+
+.use-button:hover,
+.use-button:active {
+    background: #FFFFFF;
+    color: #3362DB !important;
+    transition: 0.65s;
+}
+
+.answer {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    color: #626262;
+}
+
+.arial-bold-text {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+}
+
+.gradient-text span {
+    background: linear-gradient(45deg, #5581F1, #EB413B, #FFA300, #E422EB);
+    background-size: 400%;
+    animation: text-gradient 15s ease infinite;
+    padding: 5px 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+@keyframes text-gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}

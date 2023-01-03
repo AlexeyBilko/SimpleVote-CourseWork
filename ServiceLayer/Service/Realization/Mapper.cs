@@ -48,7 +48,7 @@ namespace ServiceLayer.Service.Realization
 
         public async Task<VoteDTO> VoteToDTO(Vote toConvert)
         {
-            Participant? participant = await unitOfWork.ParticipantRepository.Get(toConvert.ParticipantId);
+            Participant? participant = await unitOfWork.ParticipantRepository.Get((int)toConvert.ParticipantId);
 
             if (participant == null)
                 throw new ArgumentException("participant not found for vote");

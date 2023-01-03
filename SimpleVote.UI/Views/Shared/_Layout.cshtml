@@ -3,47 +3,92 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SimpleVote.UI</title>
+    <title>@ViewData["Title"] - LeadSub</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SimpleVote.UI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LeadSub.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/mainpage.css" rel="stylesheet" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SimpleVote.UI</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
     <div class="container">
+        <script
+          src="https://code.jquery.com/jquery-3.4.1.js"
+          integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+          crossorigin="anonymous">
+        </script>
+        <script type="text/javascript">
+                  $(document).ready(function()
+                  {
+                      $('.mean-toggle').click(function()
+                    {
+                          $('.mean-toggle').toggleClass('active')
+                          $('nav').toggleClass('active')
+                    })
+                  })
+        </script>
+
+        <header>
+            <a href="/" class="layout-logo" style="color: black;">Simple<span style="color: #3362DB">Vote</span></a>
+            <div class="mean-toggle"></div>
+            <nav>
+                <ul>
+                    <li><a class="menuitem mi" href="#howtouse">Menu 1</a></li>
+                    <li><a class="menuitem mi" href="#pricing">Menu 2</a></li>
+                    <li><a class="menuitem mi" href="#forwhom">Menu 3</a></li>
+                    <li class="top-main-button"><a class="main-button-text" href="~/Account/Register">Sign Up</a></li>
+                </ul>
+            </nav>
+            <div class="clear"></div>
+        </header>
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - SimpleVote.UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+        <footer class="main-footer">
+            <div class="footer-logo">
+                <a href="/" class="footer-main-logo">Simple<span style="color: #3362DB">Vote</span></a>
+            </div>
+            <div class="col-xxl-4 make-center">
+                    <a onclick="window.open('https://www.instagram.com/lead.sub')" style="cursor: pointer;" class="social-media-link d-flex justify-content-md-start">
+                        <div class="social-media-image">
+                            <img src="/images/instagram-logo.png"/>
+                        </div>
+                        <p class="ms-2 social-media-title">Instagram</p>
+                    </a>
+
+                    <a href="/" class="social-media-link d-flex justify-content-md-start">
+                        <div class="social-media-image">
+                            <img src="~/images/youtube-logo.png"/>
+                        </div>
+                        <p class="ms-2 social-media-title">YouTube</p>
+                    </a>
+        
+                    <a onclick="window.open('https://twitter.com/bilkkoo')" style="cursor: pointer;" class="social-media-link d-flex justify-content-md-start">
+                        <div class="social-media-image">
+                            <img src="~/images/Twitter-logo.svg.png"/>
+                        </div>
+                        <p class="ms-2 social-media-title">Twitter</p>
+                    </a>
+            </div>
+
+            <div class="footer-links">
+                <div>
+                    <a href="/" class="footer-link">FAQ</a>
+                </div>
+                <div>
+                    <a href="/" class="footer-link">Github</a>
+                </div>
+                <div>
+                    <a href="/" class="footer-link">Contact Us</a>
+                </div>
+            </div>
+        </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

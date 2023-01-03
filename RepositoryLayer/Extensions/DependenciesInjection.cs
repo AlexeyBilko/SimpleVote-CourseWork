@@ -11,7 +11,7 @@ namespace ServiceLayer.Extensions
 {
     public static class DependenciesInjection
     {
-        public static void AddRestaurantDbContext(this IServiceCollection services, string connectionStr)
+        public static void AddAppDbContext(this IServiceCollection services, string connectionStr)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {

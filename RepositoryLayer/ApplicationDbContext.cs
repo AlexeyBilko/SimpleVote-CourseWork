@@ -14,8 +14,15 @@ namespace RepositoryLayer
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             Database.EnsureCreated();
+
         }
-        
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity().HasRequired(c => c.Stage).WithMany().WillCascadeOnDelete(false);
+        //}
+
+
         public virtual DbSet<Form> Forms { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }

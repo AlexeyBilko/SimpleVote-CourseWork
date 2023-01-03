@@ -10,8 +10,8 @@ namespace DomainLayer.Models
     {
         public int AnswerId { get; set; }
         public virtual Answer Answer { get; set; }
-        public int ParticipantId { get; set; }
-        public virtual Participant Voter { get; set; }
+        public int? ParticipantId { get; set; }
+        public virtual Participant? Voter { get; set; }
 
     }
 }

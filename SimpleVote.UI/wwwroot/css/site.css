@@ -14,5 +14,239 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
 }
+
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap');
+@import url(responsive.css);
+
+
+header {
+    position: relative;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 10px;
+    background: #FFF;
+    border-radius: 34px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+.layout-logo {
+    float: left;
+    text-align: center;
+    line-height: 60px;
+    font-size: 36px;
+    padding: 0 20px;
+    color: black;
+    font-weight: 900;
+    text-decoration: none !important;
+    transition: 0.65s;
+}
+
+    .layout-logo:hover {
+        color: black;
+        font-size: 37px;
+        transition: 0.3s;
+    }
+
+nav {
+    float:right;
+}
+
+.clear {
+    clear: both;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+    nav ul li {
+        list-style: none;
+        margin-right: 35px;
+    }
+
+    .mi{
+        color: black !important;
+    }
+
+nav ul li a {
+    display: block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #262626;
+    border-radius: 20px;
+    font-family: "Arial";
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    transition: 0.5s;
+}
+
+.menuitem.active,
+.menuitem:hover {
+    background: #3362DB;
+    color: #fff !important;
+    transition: 0.5s;
+}
+
+.auth_menuitem {
+    margin-right: 0px !important;
+    margin-left: 10px !important;
+}
+
+.auth_menuitem_admin {
+    margin-right: -10px !important;
+    margin-left: 0px !important;
+}
+
+.auth_menuitem_ukr {
+    margin-left: 0px !important;
+}
+
+@media (max-width: 1200px) {
+    header {
+        margin: 20px;
+    }
+
+    .top-main-button {
+        display: flex !important;
+        margin-left: 0px !important;
+    }
+
+    .mean-toggle {
+        display: block;
+        width: auto;
+        height: auto;
+        margin: 10px;
+        float: right;
+        cursor: pointer;
+        text-align: center;
+        font-size: 30px;
+        color: #3362DB;
+    }
+
+        .mean-toggle:before {
+            content: '\f0c9';
+            font-family: fontAwesome;
+            line-height: 40px;
+        }
+
+        .mean-toggle.active:before {
+            content: '\f00d';
+        }
+
+    nav {
+        display: none;
+    }
+
+        nav.active {
+            display: block;
+            width: 100% !important;
+        }
+
+            nav.active ul {
+                display: block;
+            }
+
+                nav.active ul li {
+                    margin: 0 !important;
+                    text-align: center !important;
+                }
+}
+
+footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center !important;
+    position: relative;
+    max-width: 1200px;
+    margin: auto;
+    background: #FFF;
+    border-radius: 34px;
+    padding: 16px;  
+    margin-bottom: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+
+
+
+@media (max-width: 700px) {
+    footer {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .make-center, .footer-links {
+        margin-top: 24px !important;
+    }
+}
+
+.footer-logo {
+    margin: auto;
+}
+
+.footer-links {
+    text-align: left !important;
+    margin: auto;
+    color: #333333;
+}
+
+.footer-link {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    margin: auto;
+    color: inherit !important;
+}
+
+.social-media-link {
+    color: inherit !important;
+    color: #333333;
+}
+
+.social-media {
+    display: grid;
+    color: inherit !important;
+    color: black !important;
+    grid-template-columns: 1fr 1fr;
+    text-align: right;
+}
+
+a {
+    text-decoration: none;
+}
+
+.footer-main-logo {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 28px;
+    color: black !important;
+    text-decoration: none;
+}
+
+.social-media-title {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 16px;
+    margin: 0px;
+    color: inherit !important;
+    color: #333333 !important;
+}
+
+.social-media-image {
+    max-width: 25px;
+}
+
+    .social-media-image img {
+        width: 100%;
+    }
+
+.make-center {
+    margin: auto;
+}
+
