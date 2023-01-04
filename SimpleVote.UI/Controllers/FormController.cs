@@ -51,7 +51,7 @@ namespace SimpleVote.UI.Controllers
                 Votes = new List<VoteDTO>()
             };
             var res = await formService.AddQuestion(questionDTO);
-            return RedirectToAction("CreateQuestion", "Form", form.FormId);
+            return RedirectToAction("CreateQuestion", "Form", new { formId = form.FormId });
         }
 
         [HttpPost]
@@ -90,7 +90,7 @@ namespace SimpleVote.UI.Controllers
                         Participants = people
                     };
                     var res = await formService.AddAsync(_form); // TO DO - WHEN ADD FORM ADD PARTICIPANTS
-                    return RedirectToAction("CreateQuestion", "Form", res.Id);
+                    return RedirectToAction("CreateQuestion", "Form", new { formId = res.Id } );
                 }
             //}
 

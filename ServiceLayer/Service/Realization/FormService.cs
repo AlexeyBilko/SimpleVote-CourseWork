@@ -77,6 +77,11 @@ namespace ServiceLayer.Service.Realization
         public async Task<QuestionDTO> AddQuestion(QuestionDTO question)
         {
             Question res = await unitOfWork.QuestionRepository.CreateAsync(mapper.FromDTOtoQuestion(question));
+            foreach (var item in question.Answers)
+            {
+                item.QuestionId = res.Id;
+                await unitOfWork.AnswerRepository.CreateAsync(mapper.FromDTOtoAnswer(item));
+            }
             return await mapper.QuestionToDTO(res);
         }
     }
