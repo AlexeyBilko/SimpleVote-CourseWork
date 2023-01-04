@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using DomainLayer.Models;
 using RepositoryLayer.UnitOfWork;
 using ServiceLayer.DTO;
 using ServiceLayer.Service.Abstraction;
@@ -71,6 +72,12 @@ namespace ServiceLayer.Service.Realization
                 return await mapper.FormToDTO(answer);
             }
             throw new ArgumentException("answer not found");
+        }
+
+        public async Task<QuestionDTO> AddQuestion(QuestionDTO question)
+        {
+            Question res = await unitOfWork.QuestionRepository.CreateAsync(mapper.FromDTOtoQuestion(question));
+            return await mapper.QuestionToDTO(res);
         }
     }
 }

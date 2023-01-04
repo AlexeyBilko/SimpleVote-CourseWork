@@ -10,5 +10,6 @@ namespace ServiceLayer.Service.Abstraction
 {
     public interface IFormService : IService<Form, FormDTO, int>
     {
+        public Task<QuestionDTO> AddQuestion(QuestionDTO question);
     }
 }

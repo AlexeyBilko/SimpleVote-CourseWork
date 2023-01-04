@@ -4,7 +4,7 @@
     Layout = "/Views/Shared/_Layout.cshtml";
     string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 }
-@model SimpleVote.UI.Models.ViewModels.FormViewModel
+@model SimpleVote.UI.Models.ViewModels.QuestionViewModel
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
@@ -19,26 +19,25 @@
     <div class="col-md-12">
         <div class="form h-100">
             @*            <h3>@(Model == null ? Localizer["title"] : Localizer["title_edit"])</h3>*@
-            <form class="mb-5" method="post" id="contactForm" asp-action="CreateForm" asp-controller="Form" enctype="multipart/form-data">
+            <form class="mb-5" method="post" id="contactForm" asp-action="CreateQuestion" asp-controller="Form" enctype="multipart/form-data">
              
                 <input asp-for="FormId" type="hidden"/>
-                <input asp-for="UserId" type="hidden" value="@userId"/>
-                <input asp-for="TotalVoters" type="hidden"/>
-                <input asp-for="Questions" type="hidden"/>
-                <input asp-for="Participants" type="hidden"/>
 
                 <div class="row field-line">
                     <div class="col-md-6 field-line form-group mb-3">
                         <label for="" class="col-form-label">Назва Опитування:</label>
-                        <input maxlength="56" asp-for="Name" type="text" class="form-control" id="name" placeholder="name">
-                        <span asp-validation-for="Name" class="d-block mt-2 text-danger text-break"></span>
+                        <input maxlength="56" asp-for="Title" type="text" class="form-control" id="name" placeholder="name">
+                        <span asp-validation-for="Title" class="d-block mt-2 text-danger text-break"></span>
                     </div>
                     <div class="col-md-6 field-line form-group mb-3">
                         <label for="" class="col-form-label">Тип Опитування:</label>
                         <div class="form-group mb-3">
                             <select id="formtype" onchange="displayDiv()" asp-for="Type" class="custom-select" >
-                                <option value="1">Анонімне</option>
-                                <option value="2">Групове</option>
+                                <option value="1">один із списку</option>
+                                <option value="2">декілька зі списку</option>
+                                <option value="3">текст (рядок)</option>
+                                <option value="4">текст (блок)</option>
+                                <option value="5">випадаючий список</option>
                             </select>
                             <span asp-validation-for="Type" class="d-block mt-2 text-danger text-break"></span>
                         </div>
@@ -49,10 +48,21 @@
                     <div class="col-md-12 field-line form-group mb-3">
                         <div class="row">
                             <div id="cal" class="form-element" style="display:none;">
-                                <label>
-                                    Список Учасників
-                                </label>
-                                <input type="file" asp-for="participantsFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                                <div id="strings">
+                                    @for (int i = 0; i < Model.Answers.Count; i++)
+                                    {
+                                        <div class="editor-label">
+                                            @Html.TextBoxFor(m => m.Answers[i].Value)
+                                        </div>
+                                    }
+                                </div>
+
+                                <div id="newstring" style="display: none;">
+                                    <input type="text" name="Answers[#].Value" placeholder="New Answer"/>
+                                    <input type="hidden" name="Answers[#].QuestionId"/>
+                                    <input type="hidden" name="Answers[#].Id"/>
+                                </div>
+                                <button type="button" id="addstring">Add Answer</button>
                             </div>
                         </div>
                     </div>
@@ -79,8 +89,15 @@
 <script type="text/javascript">
           function displayDiv() {
               console.log("Changed")
-              if ($("#formtype :selected").text() == "Групове") {
+              if ($("#formtype :selected").val() == "1") {
                   $("#cal").show();
+                    var container = $('#strings');
+                    $('#addstring').click(function() {
+                      var index = container.children('input').length / 2;
+                      var clone = $('#newstring').clone();
+                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
+                      container.append(clone.html());
+                    });
               }
               else {
                   $("#cal").hide();
@@ -93,4 +110,4 @@
                   }
              }
        window.onbeforeunload = RefreshParent;
-    </script>
+</script>

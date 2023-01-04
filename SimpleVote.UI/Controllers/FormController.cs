@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DomainLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.DTO;
+using ServiceLayer.Service.Realization;
+using ServiceLayer.Service.Realization.IdentityServices;
 using SimpleVote.UI.Models.ViewModels;
 
 namespace SimpleVote.UI.Controllers
@@ -8,6 +11,14 @@ namespace SimpleVote.UI.Controllers
     [Authorize]
     public class FormController : Controller
     {
+        FormService formService;
+        UserService userManager;
+
+        public FormController(FormService _formService, UserService user)
+        {
+            formService = _formService;
+            userManager = user;
+        }
         public IActionResult Index()
         {
             return View();
@@ -18,23 +29,72 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> CreateQuestion(int formId)
+        {
+            QuestionViewModel vm = new QuestionViewModel()
+            {
+                FormId = formId,
+                Answers = new List<AnswerDTO>()
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateQuestion(QuestionViewModel form)
+        {
+            var questionDTO = new QuestionDTO()
+            {
+                Title = form.Title,
+                Type = form.Type,
+                FormId = form.FormId,
+                Answers = form.Answers,
+                Votes = new List<VoteDTO>()
+            };
+            var res = await formService.AddQuestion(questionDTO);
+            return RedirectToAction("CreateQuestion", "Form", form.FormId);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateForm(FormViewModel form)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 if (form != null)
                 {
+                    List<ParticipantDTO> people = new List<ParticipantDTO>();
+                    if (form.participantsFile != null && form.Type == "2")
+                    {
+                        using (var reader = new StreamReader(form.participantsFile.OpenReadStream()))
+                        {
+                            string? line;
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                string[] values = line.Split(',');
+                                ParticipantDTO person = new ParticipantDTO
+                                {
+                                    Email = values[0],
+                                    Name = values[1]
+                                };
+
+                                people.Add(person);
+                            }
+                        }
+                    }
                     FormDTO _form = new FormDTO()
                     {
+                        User = await userManager.GetUser(User),
                         Name = form.Name,
-                        Type = form.Type == "Анонімне" ? false : true,
-                        TotalVoters = 0
+                        Type = form.Type != "1",
+                        TotalVoters = 0,
+                        Questions = form.Questions,
+                        Participants = people
                     };
+                    var res = await formService.AddAsync(_form); // TO DO - WHEN ADD FORM ADD PARTICIPANTS
+                    return RedirectToAction("CreateQuestion", "Form", res.Id);
                 }
-            }
+            //}
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("CreateForm", "Form");
         }
     }
 }
