@@ -1,0 +1,89 @@
+﻿@using System.Security.Claims;
+@{
+    ViewData["Title"] = "Create Form";
+    Layout = "/Views/Shared/_Layout.cshtml";
+    string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+}
+@model SimpleVote.UI.Models.ViewModels.FormViewModel
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/CreateForm.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+@await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")
+
+<div class="row align-items-stretch no-gutters contact-wrap">
+    <div class="col-md-12">
+        <div class="form h-100">
+            @*            <h3>@(Model == null ? Localizer["title"] : Localizer["title_edit"])</h3>*@
+            <form class="mb-5" method="post" id="contactForm" asp-action="CreateForm" asp-controller="Form" enctype="multipart/form-data">
+             
+                <input asp-for="FormId" type="hidden"/>
+                <input asp-for="UserId" type="hidden" value="@userId"/>
+                <input asp-for="TotalVoters" type="hidden"/>
+                <input asp-for="Questions" type="hidden"/>
+                <input asp-for="Participants" type="hidden"/>
+
+                <div class="row field-line">
+                    <div class="col-md-6 field-line form-group mb-3">
+                        <label for="" class="col-form-label">Назва Опитування:</label>
+                        <input maxlength="56" asp-for="Name" type="text" class="form-control" id="name" placeholder="name">
+                        <span asp-validation-for="Name" class="d-block mt-2 text-danger text-break"></span>
+                    </div>
+                    <div class="col-md-6 field-line form-group mb-3">
+                        <label for="" class="col-form-label">Тип Опитування:</label>
+                        <div class="form-group mb-3">
+                            <select id="formtype" onchange="displayDiv()" asp-for="Type" class="custom-select" >
+                                <option value="1">Анонімне</option>
+                                <option value="2">Групове</option>
+                            </select>
+                            <span asp-validation-for="Type" class="d-block mt-2 text-danger text-break"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row field-line">
+                    <div class="col-md-12 field-line form-group mb-3">
+                        <div class="row">
+                            <div id="cal" class="form-element" style="display:none;">
+                                <label>
+                                    Список Учасників
+                                </label>
+                                <input type="file" asp-for="participantsFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row field-line">
+                    <div class="col-md-12 form-group">
+                        <input type="submit" value="Next" class="create-btn">
+                        <span class="submitting"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+          function displayDiv() {
+              console.log("Changed")
+              if ($("#formtype :selected").text() == "Групове") {
+                  $("#cal").show();
+              }
+              else {
+                  $("#cal").hide();
+              }
+          }
+
+        function RefreshParent() {
+             if (window.opener != null && !window.opener.closed) {
+                 window.opener.location.reload();
+                  }
+             }
+       window.onbeforeunload = RefreshParent;
+    </script>

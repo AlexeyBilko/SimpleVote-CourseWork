@@ -102,6 +102,7 @@ namespace ServiceLayer.Service.Realization
             {
                 Id = toConvert.Id,
                 TotalVoters = toConvert.TotalVoters,
+                Name = toConvert.Name,
                 Type = toConvert.Type,
                 User = mapper.Map<User,UserDTO>(toConvert.User),
                 Questions = await questions.AsEnumerable().Select(async question => await QuestionToDTO(question)).WhenAll(),
@@ -116,6 +117,7 @@ namespace ServiceLayer.Service.Realization
             return new Form()
             {
                 Id = toConvert.Id,
+                Name = toConvert.Name,
                 TotalVoters = toConvert.TotalVoters,
                 Type = toConvert.Type,
                 UserId = toConvert.User.Id

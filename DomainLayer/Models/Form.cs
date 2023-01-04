@@ -8,6 +8,7 @@ namespace DomainLayer.Models
 {
     public class Form : BaseEntity<int>
     {
+        public string Name { get; set; }
         public int TotalVoters { get; set; }
         public bool Type { get; set; } //0 - anonymous, 1 - group
         public string UserId { get; set; }
