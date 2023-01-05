@@ -1,0 +1,83 @@
+﻿
+.pagination-container {
+    /*display: flex;*/
+    /*width: 100%;*/
+    justify-content:center;
+    margin-bottom:40px;
+}
+.pagination-item {
+    text-align: center;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    background:white;
+    color:black;
+    border-radius:20px;
+    border:none;
+    min-height:70px;
+    min-width:40px;
+    display:block;
+}
+    .pagination-item.active {
+        background: #3362DB;
+        color: white;
+    }
+
+    .pagination-item:hover {
+        background: #3362DB;
+        color: white !important;
+        transition: 0.65s;
+    }
+.hide-container{
+   display:none;
+}
+.active-container{
+    display:flex;
+}
+
+
+
+.next-item {
+    text-align: center;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    background: white;
+    color: black;
+    border-radius: 20px;
+    border: none;
+    min-height: 70px;
+    min-width: 40px;
+    display: block;
+}
+.next-item:hover {
+    background: #3362DB;
+    color: white !important;
+    transition: 0.65s;
+}
+
+
+.previous-item {
+    text-align: center;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    background: white;
+    color: black;
+    border-radius: 20px;
+    border: none;
+    min-height: 70px;
+    min-width: 40px;
+    display: block;
+}
+
+    .previous-item:hover {
+        background: #3362DB;
+        color: white !important;
+        transition: 0.65s;
+    }
+
+

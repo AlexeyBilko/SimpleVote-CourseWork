@@ -1,15 +1,90 @@
 ﻿@*@model IEnumerable<BLL.DTO.SubPageDTO>*@
+@using System.Diagnostics.Eventing.Reader
 @model SimpleVote.UI.Models.ViewModels.MyFormsListViewModel
-    <head>
-        <link rel="stylesheet" href="~/css/modalMessage.css"/>
-    </head>
+<head>
+    <link rel="stylesheet" href="~/css/modalMessage.css"/>
+    <link href="~/css/myforms.css" rel="stylesheet"  asp-append-version="true" />
+</head>
+<style>
+    .form-card {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        grid-column-gap: 12px;
+        grid-row-gap: 12px;
+        justify-items: stretch;
+        align-items: stretch;
+    }
+
+    .blue-button {
+        border: none;
+        height: 50px;
+        width: 100%;
+        background: #3362DB;
+        border-radius: 14px;
+        display: block;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-family: 'Arial';
+        font-style: normal;
+        font-weight: 800;
+        font-size: 14px;
+        color: #FFFFFF;
+        transition: 0.65s;
+        cursor: pointer;
+    }
+</style>
 @if (Model.forms.Count() != 0)
 {
     @foreach (var form in Model.forms)
     {
-        bool isBlock = Model.FinishedFormsIDs.Contains(form.Id);
+        bool isFinished = Model.FinishedFormsIDs.Contains(form.Id);
 
-        <div class="subpage-card">
+        <div class="form-card subpage-card">
+            <div class="form-header">
+                @form.Name
+            </div>
+            <div class="form-button">
+                <button class="blue-button">Переглянути</button>
+            </div>
+            <div class="form-type">
+                Тип опитування: 
+                @if (form.Type == false)
+                {
+                    <span>анонімне</span>
+                }
+                else
+                {
+                    <span>групове</span>
+                }
+            </div>
+            <div class="form-button">
+                <button class="blue-button">Скопіювати посилання на опитування</button>
+            </div>
+            <div class="form-finished">
+                Статус:
+                @if (form.Finished == false)
+                {
+                    <span>активне</span>
+                }
+                else
+                {
+                    <span>завершено</span>
+                }
+            </div>
+            <div class="form-button">
+                <button class="blue-button">Перегляднути Звіт</button>
+            </div>
+            <div class="form-participants">
+                Учасників: @form.Participants.Count().ToString()
+            </div>
+            <div class="form-button">
+                <button class="blue-button">Завершити опитування</button>
+            </div>
+        </div>
+
+        @*<div class="subpage-card">
             <div>
                 <div class="@(isBlock?"block-area-title":"white-area-title")">
                     <h3 class="text-left arial-bold-text" style="font-family: 'Arial' !important; font-weight: 700 !important; font-size:19px">@form.Name</h3>
@@ -57,17 +132,14 @@
                 </div>
 
             </div>
-        </div>
+        </div>*@
     }
 }
 @*else
 {
-    <head>
-        <link rel="stylesheet" href=~/css/plans.css/>
-    </head>
 
        <div class="container-fluid col-xxl-3">
-           <button class="blue-button">Створити</button>
+           <button class="blue-button">Створити оптування</button>
        </div>
        
 
