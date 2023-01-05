@@ -95,8 +95,8 @@ namespace ServiceLayer.Service.Realization
 
         public async Task<FormDTO> FormToDTO(Form toConvert)
         {
-            var questions =  unitOfWork.QuestionRepository.GetAllQueryable().Where(form=>form.FormId == toConvert.Id);
-            var participants = unitOfWork.ParticipantRepository.GetAllQueryable().Where(participant => participant.FormId == toConvert.Id);
+            var questions =  unitOfWork.QuestionRepository.GetAllQueryable().Where(form=>form.FormId == toConvert.Id).ToList();
+            var participants = unitOfWork.ParticipantRepository.GetAllQueryable().Where(participant => participant.FormId == toConvert.Id).ToList();
 
             var questionsDTOs = new List<QuestionDTO>();
             foreach (var question in questions)
@@ -142,22 +142,28 @@ namespace ServiceLayer.Service.Realization
         public async Task<QuestionDTO> QuestionToDTO(Question toConvert)
         {
             var answers = unitOfWork.AnswerRepository.GetAllQueryable()
-                .Where(question => question.QuestionId == toConvert.Id);
+                .Where(question => question.QuestionId == toConvert.Id).ToList();
             var votes = unitOfWork.VoteRepository.GetAllQueryable()
-                .Where(vote => answers.Select(x=>x.Id).Contains(vote.AnswerId));
+                .Where(vote => answers.Select(x=>x.Id).Contains(vote.AnswerId)).ToList();
 
             var answerDTOs = new List<AnswerDTO>();
-            foreach (var answer in answers)
+            if (answers != null)
             {
-                var converted = await AnswerToDTO(answer);
-                answerDTOs.Add(converted);
+                foreach (var answer in answers)
+                {
+                    var converted = await AnswerToDTO(answer);
+                    answerDTOs.Add(converted);
+                }
             }
 
             var voteDTOs = new List<VoteDTO>();
-            foreach (var vote in votes)
+            if (votes != null)
             {
-                var converted = await VoteToDTO(vote);
-                voteDTOs.Add(converted);
+                foreach (var vote in votes)
+                {
+                    var converted = await VoteToDTO(vote);
+                    voteDTOs.Add(converted);
+                }
             }
 
             return new QuestionDTO()

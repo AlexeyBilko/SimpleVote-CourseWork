@@ -4,7 +4,7 @@
     $('#mySubPagesContainer')
         .html('<div class="card"><div class="card-skeleton description"><div></div>')
 /*        .html('<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>')*/
-    await $('#mySubPagesContainer').load(`/SubPages/MySubPagesList?userId=${userId}&pageNumber=${page}`,function () {
+    await $('#mySubPagesContainer').load(`/Home/MyFormsList?userId=${userId}&pageNumber=${page}`,function () {
         $('#paginationContainer').fadeToggle()
     })
     
