@@ -17,7 +17,7 @@
     <link href='https://fonts.googleapis.com/css?family=Prompt' rel='stylesheet'>
 </head>
 
-@if(Model?.Pagination?.QuantityPages == 0)
+@*@if(Model?.Pagination?.QuantityPages == 0)
 {
     <div style="min-height:800px">
         <div class="total-info mt-5">
@@ -29,7 +29,7 @@
 else{
     <div class="container-fluid col-xxl-8 mt-5">
         @*await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")*@
-        <input type="hidden" asp-for="@Model.UserId" id="userId"/>
+        @*<input type="hidden" asp-for="@Model.UserId" id="userId"/>
         <div id="mySubPagesContainer" style="min-height:400px">
         </div>
     </div>
@@ -58,4 +58,4 @@ else{
         }
     </div>
 }
-    <script src="~/js/mysubpages_panel.js" asp-append-version="true"></script>
+    <script src="~/js/myforms_panel.js" asp-append-version="true"></script>*@

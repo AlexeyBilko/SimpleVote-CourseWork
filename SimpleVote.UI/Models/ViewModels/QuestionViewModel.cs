@@ -8,6 +8,6 @@ namespace SimpleVote.UI.Models.ViewModels
         public string Title { get; set; }
         public string Type { get; set; }
         public int FormId { get; set; }
-        public List<AnswerDTO>? Answers { get; set; }
+        public List<string>? Answers { get; set; }
     }
 }

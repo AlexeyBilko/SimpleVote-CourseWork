@@ -32,8 +32,8 @@
                     <div class="col-md-6 field-line form-group mb-3">
                         <label for="" class="col-form-label">Тип Опитування:</label>
                         <div class="form-group mb-3">
-                            <select id="formtype" onchange="displayDiv()" asp-for="Type" class="custom-select" >
-                                <option value="1">один із списку</option>
+                            <select id="formtype" onchange="displayDiv()" asp-for="Type" class="custom-select">
+                                <option selected="selected" value="1">один із списку</option>
                                 <option value="2">декілька зі списку</option>
                                 <option value="3">текст (рядок)</option>
                                 <option value="4">текст (блок)</option>
@@ -47,20 +47,21 @@
                 <div class="row field-line">
                     <div class="col-md-12 field-line form-group mb-3">
                         <div class="row">
-                            <div id="cal" class="form-element" style="display:none;">
-                                <div id="strings">
+                            <div id="cal" class="form-element" style="display: none;">
+                                <div id="first">Додайте відповіді для питання "один із списку"</div>
+                                <div id="second">Додайте відповіді для питання "декілька зі списку"</div>
+                                <div id="fifth">Додайте відповіді для питання "випадаючий список"</div>
+                                <div id="strings" style="display: block;">
                                     @for (int i = 0; i < Model.Answers.Count; i++)
                                     {
                                         <div class="editor-label">
-                                            @Html.TextBoxFor(m => m.Answers[i].Value)
+                                            @Html.TextBoxFor(m => m.Answers[i])
                                         </div>
                                     }
                                 </div>
 
                                 <div id="newstring" style="display: none;">
-                                    <input type="text" name="Answers[#].Value" placeholder="New Answer"/>
-                                    <input type="hidden" name="Answers[#].QuestionId"/>
-                                    <input type="hidden" name="Answers[#].Id"/>
+                                    <input type="text" name="Answers[#]" placeholder="New Answer"/>
                                 </div>
                                 <button type="button" id="addstring">Add Answer</button>
                             </div>
@@ -96,13 +97,66 @@
 </div>
 
 <script type="text/javascript">
+          $("#cal").show();
+          $("#first").show();
+          $("#second").hide();
+          $("#fifth").hide();
+          
+                    var container = $('#strings');
+                    $('#addstring').click(function() {
+                      var index = container.children('input').length;
+                      var clone = $('#newstring').clone();
+                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
+                      container.append(clone.html());
+                    });
           function displayDiv() {
               console.log("Changed")
               if ($("#formtype :selected").val() == "1") {
                   $("#cal").show();
+                  $("#first").show();
+                  $("#second").hide();
+                  $("#fifth").hide();
                     var container = $('#strings');
                     $('#addstring').click(function() {
-                      var index = container.children('input').length / 2;
+                      var index = container.children('input').length;
+                      var clone = $('#newstring').clone();
+                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
+                      container.append(clone.html());
+                    });
+              }
+              else if ($("#formtype :selected").val() == "2") {
+                  $("#cal").show();
+                  $("#second").show();
+                  $("#first").hide();
+                  $("#fifth").hide();
+                    var container = $('#strings');
+                    $('#addstring').click(function() {
+                      var index = container.children('input').length;
+                      var clone = $('#newstring').clone();
+                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
+                      container.append(clone.html());
+                    });
+              }
+              else if ($("#formtype :selected").val() == "3") {
+                  $("#cal").hide();
+                  $("#first").hide();
+                  $("#second").hide();
+                  $("#fifth").hide();
+              }
+              else if ($("#formtype :selected").val() == "4") {
+                  $("#cal").hide();
+                  $("#first").hide();
+                  $("#second").hide();
+                  $("#fifth").hide();
+              }
+              else if ($("#formtype :selected").val() == "5") {
+                  $("#cal").show();
+                  $("#fifth").show();
+                  $("#first").hide();
+                  $("#second").hide();
+                    var container = $('#strings');
+                    $('#addstring').click(function() {
+                      var index = container.children('input').length;
                       var clone = $('#newstring').clone();
                       clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
                       container.append(clone.html());
@@ -110,6 +164,9 @@
               }
               else {
                   $("#cal").hide();
+                  $("#first").hide();
+                  $("#second").hide();
+                  $("#fifth").hide();
               }
           }
 
@@ -119,4 +176,5 @@
                   }
              }
        window.onbeforeunload = RefreshParent;
+
 </script>

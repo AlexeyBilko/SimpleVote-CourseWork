@@ -34,7 +34,7 @@ namespace SimpleVote.UI.Controllers
             QuestionViewModel vm = new QuestionViewModel()
             {
                 FormId = formId,
-                Answers = new List<AnswerDTO>()
+                Answers = new List<string>()
             };
             return View(vm);
         }
@@ -42,12 +42,20 @@ namespace SimpleVote.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateQuestion(QuestionViewModel form)
         {
+            var answers = new List<AnswerDTO>();
+            foreach (var answer in form.Answers)
+            {
+                answers.Add(new AnswerDTO()
+                {
+                    Value = answer
+                });
+            }
             var questionDTO = new QuestionDTO()
             {
                 Title = form.Title,
                 Type = form.Type,
                 FormId = form.FormId,
-                Answers = form.Answers,
+                Answers = answers,
                 Votes = new List<VoteDTO>()
             };
             var res = await formService.AddQuestion(questionDTO);
