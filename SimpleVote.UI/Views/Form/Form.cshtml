@@ -1,0 +1,15 @@
+﻿@model ServiceLayer.DTO.FormDTO
+@{
+    ViewData["Title"] = Model.Name;
+    Layout = "/Views/Shared/FormLayout.cshtml";
+}
+<head>
+    <title>@Model.Name</title>
+    <link rel="stylesheet" href="~/css/form.css"/>
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+    />
+</head>
+
+<h2>@Model.Name</h2>

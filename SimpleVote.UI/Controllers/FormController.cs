@@ -29,6 +29,12 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
+        [Route("form")]
+        public async Task<IActionResult> Form(int? id)
+        {
+            return View();
+        }
+        
         public async Task<IActionResult> CreateQuestion(int formId)
         {
             QuestionViewModel vm = new QuestionViewModel()
