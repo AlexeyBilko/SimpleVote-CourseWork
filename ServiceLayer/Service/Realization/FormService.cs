@@ -38,6 +38,13 @@ namespace ServiceLayer.Service.Realization
             var mappedEntity = mapper.FromDTOtoForm(entity);
             var result = await unitOfWork.FormRepository.CreateAsync(mappedEntity);
             unitOfWork.SaveChanges();
+            foreach (var item in entity.Participants)
+            {
+                item.FormId = result.Id;
+                var toAdd = mapper.FromDTOtoParticipant(item);
+                await unitOfWork.ParticipantRepository.CreateAsync(toAdd);
+            }
+            unitOfWork.SaveChanges();
 
             return await mapper.FormToDTO(result);
         }
