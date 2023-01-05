@@ -95,7 +95,8 @@ namespace SimpleVote.UI.Controllers
                         Type = form.Type != "1",
                         TotalVoters = 0,
                         Questions = form.Questions,
-                        Participants = people
+                        Participants = people,
+                        Finished = false
                     };
                     var res = await formService.AddAsync(_form); // TO DO - WHEN ADD FORM ADD PARTICIPANTS
                     return RedirectToAction("CreateQuestion", "Form", new { formId = res.Id } );

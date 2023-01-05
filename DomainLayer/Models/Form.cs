@@ -12,6 +12,7 @@ namespace DomainLayer.Models
         public int TotalVoters { get; set; }
         public bool Type { get; set; } //0 - anonymous, 1 - group
         public string UserId { get; set; }
+        public bool Finished { get; set; }
         public virtual User User { get; set; }
     }
 }

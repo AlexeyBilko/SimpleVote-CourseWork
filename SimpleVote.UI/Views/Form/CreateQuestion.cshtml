@@ -51,10 +51,10 @@
                                 <div id="first">Додайте відповіді для питання "один із списку"</div>
                                 <div id="second">Додайте відповіді для питання "декілька зі списку"</div>
                                 <div id="fifth">Додайте відповіді для питання "випадаючий список"</div>
-                                <div id="strings" style="display: block;">
+                                <div id="strings">
                                     @for (int i = 0; i < Model.Answers.Count; i++)
                                     {
-                                        <div class="editor-label">
+                                        <div class="editor-label" style="display: block;">
                                             @Html.TextBoxFor(m => m.Answers[i])
                                         </div>
                                     }
@@ -111,6 +111,9 @@
                     });
           function displayDiv() {
               console.log("Changed")
+              
+              var container = $('#strings');
+              container.childer('intput').clear();
               if ($("#formtype :selected").val() == "1") {
                   $("#cal").show();
                   $("#first").show();

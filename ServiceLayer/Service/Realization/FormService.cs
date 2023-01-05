@@ -22,6 +22,17 @@ namespace ServiceLayer.Service.Realization
             mapper = new MyMapper(this.unitOfWork);
         }
 
+        public async Task<List<FormDTO>> GetFormsbyUserId(string userId)
+        {
+            var result = unitOfWork.FormRepository.GetAllQueryable().Where(x => x.UserId == userId).ToList();
+            List<FormDTO> dtos = new List<FormDTO>();
+            foreach (var item in result)
+            {
+                var converted = await mapper.FormToDTO(item);
+                dtos.Add(converted);
+            }
+            return dtos.ToList();
+        }
         public async Task<FormDTO> AddAsync(FormDTO entity)
         {
             var mappedEntity = mapper.FromDTOtoForm(entity);

@@ -2,7 +2,7 @@
 
 namespace SimpleVote.UI.Models.ViewModels
 {
-    public class MySubPagesListViewModel
+    public class MyFormsListViewModel
     {
         public IEnumerable<FormDTO> forms { get; set; }
         public string UserId { get; set; }

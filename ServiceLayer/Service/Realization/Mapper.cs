@@ -89,7 +89,7 @@ namespace ServiceLayer.Service.Realization
                 Id = toConvert.Id,
                 Name = toConvert.Name,
                 Email = toConvert.Email,
-                FormId = toConvert.FormId
+                FormId = toConvert.FormId,
             };
         }
 
@@ -98,15 +98,29 @@ namespace ServiceLayer.Service.Realization
             var questions =  unitOfWork.QuestionRepository.GetAllQueryable().Where(form=>form.FormId == toConvert.Id);
             var participants = unitOfWork.ParticipantRepository.GetAllQueryable().Where(participant => participant.FormId == toConvert.Id);
 
+            var questionsDTOs = new List<QuestionDTO>();
+            foreach (var question in questions)
+            {
+                var converted = await QuestionToDTO(question);
+                questionsDTOs.Add(converted);
+            }
+            var participantsDTOs = new List<ParticipantDTO>();
+            foreach (var participant in participants)
+            {
+                var converted = await ParticipantToDTO(participant);
+                participantsDTOs.Add(converted);
+            }
+
             return new FormDTO()
             {
                 Id = toConvert.Id,
                 TotalVoters = toConvert.TotalVoters,
                 Name = toConvert.Name,
                 Type = toConvert.Type,
+                Finished = toConvert.Finished,
                 User = mapper.Map<User,UserDTO>(toConvert.User),
-                Questions = await questions.AsEnumerable().Select(async question => await QuestionToDTO(question)).WhenAll(),
-                Participants = await participants.AsEnumerable().Select(async participant => await ParticipantToDTO(participant)).WhenAll()
+                Questions = questionsDTOs,
+                Participants = participantsDTOs
 
             };
         }
@@ -120,7 +134,8 @@ namespace ServiceLayer.Service.Realization
                 Name = toConvert.Name,
                 TotalVoters = toConvert.TotalVoters,
                 Type = toConvert.Type,
-                UserId = toConvert.User.Id
+                UserId = toConvert.User.Id,
+                Finished = toConvert.Finished
             };
         }
 
@@ -131,14 +146,28 @@ namespace ServiceLayer.Service.Realization
             var votes = unitOfWork.VoteRepository.GetAllQueryable()
                 .Where(vote => answers.Select(x=>x.Id).Contains(vote.AnswerId));
 
+            var answerDTOs = new List<AnswerDTO>();
+            foreach (var answer in answers)
+            {
+                var converted = await AnswerToDTO(answer);
+                answerDTOs.Add(converted);
+            }
+
+            var voteDTOs = new List<VoteDTO>();
+            foreach (var vote in votes)
+            {
+                var converted = await VoteToDTO(vote);
+                voteDTOs.Add(converted);
+            }
+
             return new QuestionDTO()
             {
                 Id = toConvert.Id,
                 Title = toConvert.Title,
                 Type = toConvert.Type,
                 FormId = toConvert.FormId,
-                Answers = await answers.AsEnumerable().Select(async answer => await AnswerToDTO(answer)).WhenAll(),
-                Votes = await votes.AsEnumerable().Select(async vote => await VoteToDTO(vote)).WhenAll()
+                Answers = answerDTOs,
+                Votes = voteDTOs
             };
         }
 
