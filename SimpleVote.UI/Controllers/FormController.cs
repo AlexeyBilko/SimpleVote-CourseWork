@@ -13,11 +13,13 @@ namespace SimpleVote.UI.Controllers
     {
         FormService formService;
         UserService userManager;
+        VoteService voteService;
 
-        public FormController(FormService _formService, UserService user)
+        public FormController(FormService _formService, UserService user, VoteService vs)
         {
             formService = _formService;
             userManager = user;
+            voteService = vs;
         }
         public IActionResult Index()
         {
@@ -60,6 +62,32 @@ namespace SimpleVote.UI.Controllers
         public async Task<IActionResult> SubmitForm(ShowFormViewModel vm)
         {
             ShowFormViewModel _vm = new ShowFormViewModel();
+            var form = await formService.GetAsync(vm.toShow.Id);
+            for (int i = 0; i < vm.votes.Count; i++)
+            {
+                if (form.Questions.ToList()[i].Type == "2")
+                {
+                    string SubmitedAnswer = "";
+                    foreach (var item in vm.votes[i])
+                    {
+                        SubmitedAnswer += ("///" + item);
+                    }
+
+                    await voteService.AddAsync(new VoteDTO()
+                    {
+                        QuestionId = form.Questions.ToList()[i].Id,
+                        SubmitedAnswer = SubmitedAnswer
+                    });
+                }
+                else
+                {
+                    await voteService.AddAsync(new VoteDTO()
+                    {
+                        QuestionId = form.Questions.ToList()[i].Id,
+                        SubmitedAnswer = vm.votes[i][0]
+                    });
+                }
+            }
             return RedirectToAction("Index", "Home");
         }
 

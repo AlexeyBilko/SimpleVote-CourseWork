@@ -39,6 +39,40 @@ namespace SimpleVote.UI.Controllers
         {
             return View();
         }
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var email = (await userService.GetUser(User)).Email;
+                var res = await userService.ChangePasswordAsync(email, model.Password, model.ConfirmNewPassword);
+                if (res.Succeeded)
+                {
+                    TempData["Message"] = "Пароль успішно змінено";
+                }
+                else
+                {
+                    TempData["Message"] = "";
+                    int i = 1;
+                    foreach (var item in res.Errors)
+                    {
+                        TempData["Message"] += i.ToString() + ". " + item.Code + "\n";
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                TempData["Message"] = "Помилка зміни паролю";
+            }
+            return RedirectToAction("ForgotPassword","Account");
+        }
         //public IActionResult EnterEmail()
         //{
         //    return View();
