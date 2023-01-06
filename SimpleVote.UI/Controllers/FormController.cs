@@ -30,11 +30,38 @@ namespace SimpleVote.UI.Controllers
         }
 
         [Route("form")]
-        public async Task<IActionResult> Form(int? id)
+        public async Task<IActionResult> Form(int? id = 1)
         {
-            return View();
+            try
+            {
+                FormDTO toDisplay = await formService.GetAsync((int)id);
+                List<string> emptyVotes = new List<string>();
+                for (int i = 0; i < toDisplay.Questions.Count(); i++)
+                {
+                    emptyVotes.Add("");
+                }
+                ShowFormViewModel vm = new ShowFormViewModel()
+                {
+                    toShow = toDisplay,
+                    votes = emptyVotes
+                };
+                return View(vm);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
         }
-        
+
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitForm(ShowFormViewModel vm)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+
         public async Task<IActionResult> CreateQuestion(int formId)
         {
             QuestionViewModel vm = new QuestionViewModel()

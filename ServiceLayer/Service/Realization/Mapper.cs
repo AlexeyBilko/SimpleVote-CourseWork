@@ -56,7 +56,8 @@ namespace ServiceLayer.Service.Realization
             return new VoteDTO()
             {
                 Id = toConvert.Id,
-                AnswerId = toConvert.AnswerId,
+                QuestionId = toConvert.QuestionId,
+                SubmitedAnswer = toConvert.SubmitedAnswer,
                 Participant = await ParticipantToDTO(participant)
             };
         }
@@ -66,7 +67,8 @@ namespace ServiceLayer.Service.Realization
             return new Vote()
             {
                 Id = toConvert.Id,
-                AnswerId = toConvert.AnswerId,
+                QuestionId = toConvert.QuestionId,
+                SubmitedAnswer = toConvert.SubmitedAnswer,
                 ParticipantId = toConvert.Participant.Id
             };
         }
@@ -144,7 +146,7 @@ namespace ServiceLayer.Service.Realization
             var answers = unitOfWork.AnswerRepository.GetAllQueryable()
                 .Where(question => question.QuestionId == toConvert.Id).ToList();
             var votes = unitOfWork.VoteRepository.GetAllQueryable()
-                .Where(vote => answers.Select(x=>x.Id).Contains(vote.AnswerId)).ToList();
+                .Where(vote => vote.QuestionId == toConvert.Id).ToList();
 
             var answerDTOs = new List<AnswerDTO>();
             if (answers != null)

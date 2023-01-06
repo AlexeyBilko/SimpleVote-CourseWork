@@ -1,10 +1,11 @@
-﻿@model ServiceLayer.DTO.FormDTO
+﻿@model SimpleVote.UI.Models.ViewModels.ShowFormViewModel
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.toShow.Name;
     Layout = "/Views/Shared/FormLayout.cshtml";
+
 }
 <head>
-    <title>@Model.Name</title>
+    <title>@Model.toShow.Name</title>
     <link rel="stylesheet" href="~/css/form.css"/>
     <link
         rel="stylesheet"
@@ -12,4 +13,47 @@
     />
 </head>
 
-<h2>@Model.Name</h2>
+<h2>@Model.toShow.Name</h2>
+<form class="mb-5" method="post" id="contactForm" asp-action="SubmitForm" asp-controller="Form" enctype="multipart/form-data">
+    @for (int i = 0; i < Model.toShow.Questions.Count(); i++)//var question in Model.toShow.Questions)
+    {
+        @if (Model.toShow.Questions.ToList()[i].Type == "1")
+        {
+            <div>@Model.toShow.Questions.ToList()[i].Title</div>
+            @foreach (var answer in Model.toShow.Questions.ToList()[i].Answers)
+            {
+                <input type="radio" name="@Model.toShow.Questions.ToList()[i].Votes" value="@answer.Value" />
+            }
+        }
+        else if (Model.toShow.Questions.ToList()[i].Type == "2")
+        {
+            <div>@Model.toShow.Questions.ToList()[i].Title</div>
+            @foreach (var answer in Model.toShow.Questions.ToList()[i].Answers)
+            {
+                <input type="checkbox" name="" value="@answer.Value" />
+            }
+        }
+        else if (Model.toShow.Questions.ToList()[i].Type == "3")
+        {
+            <div>@Model.toShow.Questions.ToList()[i].Title</div>
+            <input asp-for="@Model.votes[i]" type="text" placeholder="Введіть відповідь"/>
+        }
+        else if (Model.toShow.Questions.ToList()[i].Type == "4")
+        {
+            <div>@Model.toShow.Questions.ToList()[i].Title</div>
+            <textarea name=""></textarea>
+        }
+        else if (Model.toShow.Questions.ToList()[i].Type == "5")
+        {
+            <div>@Model.toShow.Questions.ToList()[i].Title</div>
+            <select>
+                <option selected="selected">Оберіть один із випадаючого списку</option>
+                @foreach (var answer in Model.toShow.Questions.ToList()[i].Answers)
+                {
+                    <option value="@answer.Value">@answer.Value</option>
+                }
+            </select>
+
+        }
+    }
+</form>
