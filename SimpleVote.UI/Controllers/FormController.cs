@@ -35,10 +35,11 @@ namespace SimpleVote.UI.Controllers
             try
             {
                 FormDTO toDisplay = await formService.GetAsync((int)id);
-                List<string> emptyVotes = new List<string>();
+                List<List<string>> emptyVotes = new List<List<string>>();
                 for (int i = 0; i < toDisplay.Questions.Count(); i++)
                 {
-                    emptyVotes.Add("");
+                    emptyVotes.Add(new List<string>());
+                    emptyVotes[i].Add("");
                 }
                 ShowFormViewModel vm = new ShowFormViewModel()
                 {
@@ -58,6 +59,7 @@ namespace SimpleVote.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitForm(ShowFormViewModel vm)
         {
+            ShowFormViewModel _vm = new ShowFormViewModel();
             return RedirectToAction("Index", "Home");
         }
 

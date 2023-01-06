@@ -97,6 +97,7 @@ namespace ServiceLayer.Service.Realization
 
         public async Task<FormDTO> FormToDTO(Form toConvert)
         {
+            var quess = (await unitOfWork.QuestionRepository.GetAllAsync()).ToList();
             var questions =  unitOfWork.QuestionRepository.GetAllQueryable().Where(form=>form.FormId == toConvert.Id).ToList();
             var participants = unitOfWork.ParticipantRepository.GetAllQueryable().Where(participant => participant.FormId == toConvert.Id).ToList();
 
