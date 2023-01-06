@@ -13,6 +13,12 @@
     />
 </head>
 
+<style>
+    input {
+        display: inline-block;
+    }
+</style>
+
 <h2>@Model.toShow.Name</h2>
 <form class="mb-5" method="post" id="contactForm" asp-action="SubmitForm" asp-controller="Form" enctype="multipart/form-data">
     @for (int i = 0; i < Model.toShow.Questions.Count(); i++)//var question in Model.toShow.Questions)
@@ -22,7 +28,8 @@
             <div>@Model.toShow.Questions.ToList()[i].Title</div>
             @foreach (var answer in Model.toShow.Questions.ToList()[i].Answers)
             {
-                <input type="radio" name="@Model.toShow.Questions.ToList()[i].Votes" value="@answer.Value" />
+                <input type="radio" id="radio-@i" name="votes[@i]" value="@answer.Value" placeholder="@answer.Value"/>
+                <label for="radio-@i">@answer.Value</label>
             }
         }
         else if (Model.toShow.Questions.ToList()[i].Type == "2")
@@ -30,23 +37,24 @@
             <div>@Model.toShow.Questions.ToList()[i].Title</div>
             @foreach (var answer in Model.toShow.Questions.ToList()[i].Answers)
             {
-                <input type="checkbox" name="" value="@answer.Value" />
+                <input type="checkbox" id="checkbox-@i" name="votes[@i]" value="@answer.Value" placeholder="@answer.Value"/>
+                <label for="checkbox-@i">@answer.Value</label>
             }
         }
         else if (Model.toShow.Questions.ToList()[i].Type == "3")
         {
             <div>@Model.toShow.Questions.ToList()[i].Title</div>
-            <input asp-for="@Model.votes[i]" type="text" placeholder="Введіть відповідь"/>
+            <input asp-for="votes[i]" type="text" placeholder="Введіть відповідь"/>
         }
         else if (Model.toShow.Questions.ToList()[i].Type == "4")
         {
             <div>@Model.toShow.Questions.ToList()[i].Title</div>
-            <textarea name=""></textarea>
+            <textarea asp-for="votes[i]" name="votes[i]"></textarea>
         }
         else if (Model.toShow.Questions.ToList()[i].Type == "5")
         {
             <div>@Model.toShow.Questions.ToList()[i].Title</div>
-            <select>
+            <select asp-for="votes[i]">
                 <option selected="selected">Оберіть один із випадаючого списку</option>
                 @foreach (var answer in Model.toShow.Questions.ToList()[i].Answers)
                 {

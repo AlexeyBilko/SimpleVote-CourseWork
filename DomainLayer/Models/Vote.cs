@@ -10,7 +10,7 @@ namespace DomainLayer.Models
     {
         //public int AnswerId { get; set; }
         //public virtual Answer Answer { get; set; }
-        public List<string> SubmitedAnswer { get; set; }
+        public string? SubmitedAnswer { get; set; }
         public int QuestionId { get; set; }
         public virtual Question Question { get; set; }
         public int? ParticipantId { get; set; }

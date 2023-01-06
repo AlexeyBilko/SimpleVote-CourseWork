@@ -33,7 +33,8 @@
                         <label for="" class="col-form-label">Тип Опитування:</label>
                         <div class="form-group mb-3">
                             <select id="formtype" onchange="displayDiv()" asp-for="Type" class="custom-select">
-                                <option selected="selected" value="1">один із списку</option>
+                                <option selected="selected" >оберіть тип...</option>
+                                <option value="1">один із списку</option>
                                 <option value="2">декілька зі списку</option>
                                 <option value="3">текст (рядок)</option>
                                 <option value="4">текст (блок)</option>
@@ -51,6 +52,7 @@
                                 <div id="first">Додайте відповіді для питання "один із списку"</div>
                                 <div id="second">Додайте відповіді для питання "декілька зі списку"</div>
                                 <div id="fifth">Додайте відповіді для питання "випадаючий список"</div>
+                                <div id="choosetype">Оберіть тип запитання</div>
                                 <div id="strings">
                                     @for (int i = 0; i < Model.Answers.Count; i++)
                                     {
@@ -97,82 +99,63 @@
 </div>
 
 <script type="text/javascript">
-          $("#cal").show();
-          $("#first").show();
-          $("#second").hide();
-          $("#fifth").hide();
-          
-                    var container = $('#strings');
-                    $('#addstring').click(function() {
-                      var index = container.children('input').length;
-                      var clone = $('#newstring').clone();
-                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
-                      container.append(clone.html());
-                    });
+          var container = $('#strings');
+          $('#addstring').click(function() {
+            var index = container.children('input').length;
+            console.log(index);
+            var clone = $('#newstring').clone();
+            clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
+            container.append(clone.html());
+          });
           function displayDiv() {
               console.log("Changed")
               
               var container = $('#strings');
-              container.childer('intput').clear();
+              container.children('input').remove();
+;
               if ($("#formtype :selected").val() == "1") {
                   $("#cal").show();
                   $("#first").show();
+                  $("#choosetype").hide();
                   $("#second").hide();
                   $("#fifth").hide();
-                    var container = $('#strings');
-                    $('#addstring').click(function() {
-                      var index = container.children('input').length;
-                      var clone = $('#newstring').clone();
-                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
-                      container.append(clone.html());
-                    });
               }
               else if ($("#formtype :selected").val() == "2") {
                   $("#cal").show();
                   $("#second").show();
                   $("#first").hide();
+                  $("#choosetype").hide();
                   $("#fifth").hide();
-                    var container = $('#strings');
-                    $('#addstring').click(function() {
-                      var index = container.children('input').length;
-                      var clone = $('#newstring').clone();
-                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
-                      container.append(clone.html());
-                    });
               }
               else if ($("#formtype :selected").val() == "3") {
                   $("#cal").hide();
                   $("#first").hide();
                   $("#second").hide();
+                  $("#choosetype").hide();
                   $("#fifth").hide();
               }
               else if ($("#formtype :selected").val() == "4") {
                   $("#cal").hide();
                   $("#first").hide();
                   $("#second").hide();
+                  $("#choosetype").hide();
                   $("#fifth").hide();
               }
               else if ($("#formtype :selected").val() == "5") {
                   $("#cal").show();
                   $("#fifth").show();
+                  $("#choosetype").hide();
                   $("#first").hide();
                   $("#second").hide();
-                    var container = $('#strings');
-                    $('#addstring').click(function() {
-                      var index = container.children('input').length;
-                      var clone = $('#newstring').clone();
-                      clone.html($(clone).html().replace(/\[#\]/g, '[' + index + ']'));
-                      container.append(clone.html());
-                    });
               }
               else {
                   $("#cal").hide();
                   $("#first").hide();
                   $("#second").hide();
                   $("#fifth").hide();
+                  $("#choosetype").show();
               }
           }
-
         function RefreshParent() {
              if (window.opener != null && !window.opener.closed) {
                  window.opener.location.reload();
