@@ -33,9 +33,8 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
-
-
-
+        
+        [AllowAnonymous]
         [Route("participate")]
         public IActionResult Participate(int? id)
         {
@@ -51,6 +50,7 @@ namespace SimpleVote.UI.Controllers
             return View(vm);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> ParticipateSubmit(ParticipateViewModel vm)
         {
@@ -68,6 +68,7 @@ namespace SimpleVote.UI.Controllers
             return RedirectToAction("Participate", "Form", new { id = vm.FormId });
         }
 
+        [AllowAnonymous]
         [Route("form")]
         public async Task<IActionResult> Form(int? id = 1)
         {
@@ -125,7 +126,7 @@ namespace SimpleVote.UI.Controllers
 
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> SubmitForm(ShowFormViewModel vm)
         {
