@@ -33,7 +33,24 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
-        
+        public async Task<IActionResult> Report(int? id)
+        {
+            try
+            {
+                var form = (await formService.GetAsync((int)id));
+                ReportViewModel vm = new ReportViewModel()
+                {
+                    FormTitle = form.Name,
+                    Questions = form.Questions.ToList()
+                };
+                return View(vm);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         [AllowAnonymous]
         [Route("participate")]
         public IActionResult Participate(int? id)
