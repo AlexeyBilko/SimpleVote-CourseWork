@@ -18,9 +18,11 @@
 <div class="text-center">
     <h4 class="display-4">@Model.FormTitle</h4>
     <h3><a href="~/Home/MyForms">Back</a></h3>
+    <h5>Всього учасників: @Model.Questions[0].Votes.ToList().Count</h5>
     @foreach (var item in Model.Questions)
     {
         <h5>@item.Title</h5>
+        <h6>Тип питання: @item.Type</h6>
         @if (item.Type == "3" || item.Type == "4")
         {
             @foreach (var i in item.Votes)
@@ -46,13 +48,35 @@
                 var polarChartCanvas = document.getElementById("polarChart-@item.Id");
                 
                 var answers = [];
-                var score = [2,2,2];
+                var score = [];
 
                 @foreach (var _item in item.Answers)
                 {
+                    int currScore = 0;
+                    if (item.Type == "2")
+                    {
+                        var votes = item.Votes;
+                        foreach (var vote in votes)
+                        {
+                            var strs = vote.SubmitedAnswer.Split("///");
+                            foreach (var str in strs)
+                            {
+                                if (str == _item.Value)
+                                {
+                                    currScore++;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        currScore = item.Votes.Where(x => x.SubmitedAnswer == _item.Value).Count();
+                    }
+                    @:var currscore = @currScore;
                     @:var str = "@_item.Value";
                     @:var newstr = decodeHTMLEntities(str);
                     @:answers.push(newstr);
+                    @:score.push(currscore);
                 }
                 
 
@@ -83,7 +107,7 @@
                         scale: {
                             ticks: {
                                 display: true,
-                                stepSize: 20
+                                stepSize: 1
                             }
                         },
                         legend: {
