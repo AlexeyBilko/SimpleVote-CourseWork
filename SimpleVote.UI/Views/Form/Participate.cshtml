@@ -1,0 +1,35 @@
+﻿@model SimpleVote.UI.Models.ViewModels.ParticipateViewModel
+@{
+    ViewData["Title"] = "Participate";
+    Layout = "/Views/Shared/FormLayout.cshtml";
+}
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/mainpage.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/Login.css" rel="stylesheet" />
+</head>
+
+@await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")
+<div class="container-fluid col-xl-5">
+
+    <form method="post" asp-controller="Form" asp-action="Participate" class="mt-5">
+        <div class="form-border">
+            <h3>Login</h3>
+            <input type="hidden" asp-for="FormId"/>
+            
+            <label asp-validation-for="Password">Ім'я</label>
+            <input type="text" asp-for="Name" placeholder="Your Password" />
+            <span asp-validation-for="Name" class="text-danger fw-bold d-block"></span>
+
+            <label asp-validation-for="Email">Електронна пошта</label>
+            <input type="email" asp-for="Email" placeholder="Your Email" />
+            <span asp-validation-for="Email" class="text-danger fw-bold d-block"></span>
+
+            <input class="button-login"type="submit" value="Прийняти участь" />
+        </div>
+    </form>
+    <div class="text-danger mt-3 fw-bold d-block" asp-validation-summary="ModelOnly"></div>
+</div>

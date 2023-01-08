@@ -14,12 +14,14 @@ namespace SimpleVote.UI.Controllers
         FormService formService;
         UserService userManager;
         VoteService voteService;
+        ParticipantService participantService;
 
-        public FormController(FormService _formService, UserService user, VoteService vs)
+        public FormController(FormService _formService, UserService user, VoteService vs, ParticipantService ps)
         {
             formService = _formService;
             userManager = user;
             voteService = vs;
+            participantService = ps;
         }
         public IActionResult Index()
         {
@@ -31,24 +33,88 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
+
+        [Route("participate")]
+        public IActionResult Participate(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ParticipateViewModel vm = new ParticipateViewModel()
+            {
+                FormId = (int)id
+            };
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Participate(ParticipateViewModel vm)
+        {
+            var allowedParticipants =
+                (await participantService.GetAllAsync()).Where(x => x.FormId == vm.FormId).ToList();
+            if (allowedParticipants.Select(x => x.Email).ToList().Contains(vm.Email))
+            {
+                var participant = allowedParticipants.Find(x => x.Email == vm.Email);
+                HttpContext.Session.SetString("participantId", participant.Id.ToString());
+                return RedirectToAction("Form", "Form", new { id = vm.FormId });
+            }
+
+            TempData["Message"] =
+                "Нажаль учасник з такою електронною поштою не може приймати участь в данному опитуванні";
+            return View(vm);
+        }
+
         [Route("form")]
         public async Task<IActionResult> Form(int? id = 1)
         {
             try
             {
                 FormDTO toDisplay = await formService.GetAsync((int)id);
-                List<List<string>> emptyVotes = new List<List<string>>();
-                for (int i = 0; i < toDisplay.Questions.Count(); i++)
+                if (toDisplay.Type == false)
                 {
-                    emptyVotes.Add(new List<string>());
-                    emptyVotes[i].Add("");
+                    List<List<string>> emptyVotes = new List<List<string>>();
+                    for (int i = 0; i < toDisplay.Questions.Count(); i++)
+                    {
+                        emptyVotes.Add(new List<string>());
+                        emptyVotes[i].Add("");
+                    }
+
+                    ShowFormViewModel vm = new ShowFormViewModel()
+                    {
+                        toShow = toDisplay,
+                        votes = emptyVotes
+                    };
+                    return View(vm);
                 }
-                ShowFormViewModel vm = new ShowFormViewModel()
+                else
                 {
-                    toShow = toDisplay,
-                    votes = emptyVotes
-                };
-                return View(vm);
+                    var allowedParticipants =
+                        (await participantService.GetAllAsync()).Where(x => x.FormId == toDisplay.Id).ToList();
+                    if (HttpContext.Session.GetString("participantId") != null
+                        && allowedParticipants.Select(x=>x.Id).ToList().Contains(int.Parse(HttpContext.Session.GetString("participantId"))))
+                    {
+                        int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
+                        List<List<string>> emptyVotes = new List<List<string>>();
+                        for (int i = 0; i < toDisplay.Questions.Count(); i++)
+                        {
+                            emptyVotes.Add(new List<string>());
+                            emptyVotes[i].Add("");
+                        }
+                        ShowFormViewModel vm = new ShowFormViewModel()
+                        {
+                            toShow = toDisplay,
+                            votes = emptyVotes,
+                            Participant = allowedParticipants.Find(x=>x.Id == ParticipantId)
+                        };
+                        return View(vm);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Participate", "Form", new { formId = toDisplay.Id });
+                    }
+                }
             }
             catch (Exception ex)
             {
