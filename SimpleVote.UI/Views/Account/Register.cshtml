@@ -14,28 +14,28 @@
     @await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")
     <form method="post" action="~/Account/Register" class="mt-5">
         <div class="form-border">
-            <h3>Register</h3>
+            <h3>Реєстрація</h3>
 
-            <label asp-validation-for="UserName">Name</label>
-            <input type="text" asp-for="UserName" placeholder="Your Name" />
+            <label asp-validation-for="UserName">Ім'я</label>
+            <input type="text" asp-for="UserName" placeholder="Введіть ваше ім'я" />
             <span asp-validation-for="UserName" class="text-danger fw-bold d-block"></span>
 
-            <label asp-validation-for="Email">Email</label>
-            <input type="email" asp-for="Email" placeholder="Your Email" />
+            <label asp-validation-for="Email">Електронна пошта</label>
+            <input type="email" asp-for="Email" placeholder="Введіть вашу електронну пошту" />
              <span asp-validation-for="Email" class="text-danger fw-bold d-block"></span>
 
-            <label asp-validation-for="Password">Password</label>
-            <input type="password" asp-for="Password" placeholder="Create Password" />
+            <label asp-validation-for="Password">Пароль</label>
+            <input type="password" asp-for="Password" placeholder="Придумайте пароль" />
             <span asp-validation-for="Password" class="text-danger fw-bold d-block"></span>
 
-            <label asp-validation-for="ConfirmPassword">Confirm Password</label>
-            <input type="password" asp-for="ConfirmPassword" placeholder="Confirm Password" />
+            <label asp-validation-for="ConfirmPassword">Підтвердіть пароль</label>
+            <input type="password" asp-for="ConfirmPassword" placeholder="Повторно введіть пароль" />
             <span asp-validation-for="ConfirmPassword" class="text-danger fw-bold d-block"></span>
 
-            <input class="button-login"type="submit" value="Create new account" />
+            <input class="button-login"type="submit" value="Створити новий акаунт" />
         </div>
         <div class="login-links"> 
-            <a class="link" href="~/Account/Login">I already have an account</a>
+            <a class="link" href="~/Account/Login">Я вже зареєстрований</a>
         </div>
     </form>
     <div class="container-fluid col-xl-5">

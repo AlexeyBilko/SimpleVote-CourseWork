@@ -34,6 +34,8 @@ namespace SimpleVote.UI.Controllers
         }
 
 
+
+
         [Route("participate")]
         public IActionResult Participate(int? id)
         {
@@ -129,34 +131,63 @@ namespace SimpleVote.UI.Controllers
         {
             ShowFormViewModel _vm = new ShowFormViewModel();
             var form = await formService.GetAsync(vm.toShow.Id);
-            for (int i = 0; i < vm.votes.Count; i++)
+            if (form.Type == false)
             {
-                if (form.Questions.ToList()[i].Type == "2")
+                for (int i = 0; i < vm.votes.Count; i++)
                 {
                     string SubmitedAnswer = "";
+                    if (form.Questions.ToList()[i].Type == "2")
+                    {
+                        foreach (var item in vm.votes[i])
+                        {
+                            SubmitedAnswer += ("///" + item);
+                        }
+                    }
+                    else
+                    {
+                        SubmitedAnswer = vm.votes[i][0];
+                    }
+
+                    var part = (await participantService.GetAllAsync()).First(x => x.FormId == form.Id);
+                    await voteService.AddAsync(new VoteDTO()
+                    {
+                        QuestionId = form.Questions.ToList()[i].Id,
+                        SubmitedAnswer = SubmitedAnswer,
+                        Participant = part
+                    });
+                }
+                TempData["Message"] =
+                    "Форма Успішно надіслана";
+                return RedirectToAction("Index", "Home");
+            }
+            for (int i = 0; i < vm.votes.Count; i++)
+            {
+                string SubmitedAnswer = "";
+                if (form.Questions.ToList()[i].Type == "2")
+                {
                     foreach (var item in vm.votes[i])
                     {
                         SubmitedAnswer += ("///" + item);
                     }
-
-                    await voteService.AddAsync(new VoteDTO()
-                    {
-                        QuestionId = form.Questions.ToList()[i].Id,
-                        SubmitedAnswer = SubmitedAnswer
-                    });
                 }
                 else
                 {
-                    int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
-                    var participant = (await participantService.GetAllAsync()).First(x => x.Id == ParticipantId);
-                    await voteService.AddAsync(new VoteDTO()
-                    {
-                        QuestionId = form.Questions.ToList()[i].Id,
-                        SubmitedAnswer = vm.votes[i][0],
-                        Participant = participant
-                    });
+                    SubmitedAnswer = vm.votes[i][0];
                 }
+
+                int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
+                var participant = (await participantService.GetAllAsync()).First(x => x.Id == ParticipantId);
+                await voteService.AddAsync(new VoteDTO()
+                {
+                    QuestionId = form.Questions.ToList()[i].Id,
+                    SubmitedAnswer = SubmitedAnswer,
+                    Participant = participant
+                });
+                HttpContext.Session.SetString("participantId", "");
             }
+
+            TempData["Message"] =
+                "Форма Успішно надіслана";
             return RedirectToAction("Index", "Home");
         }
 
@@ -230,8 +261,17 @@ namespace SimpleVote.UI.Controllers
                         Participants = people,
                         Finished = false
                     };
-                    var res = await formService.AddAsync(_form); // TO DO - WHEN ADD FORM ADD PARTICIPANTS
-                    return RedirectToAction("CreateQuestion", "Form", new { formId = res.Id } );
+
+                    var res = await formService.AddAsync(_form);
+
+                    var part = await participantService.AddAsync(new ParticipantDTO()
+                    {
+                        Email = "Анонімне",
+                        Name = "Анонімне",
+                        FormId = res.Id
+                    });
+
+                return RedirectToAction("CreateQuestion", "Form", new { formId = res.Id } );
                 }
             //}
 

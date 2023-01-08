@@ -24,7 +24,15 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
-        public async Task<IActionResult> MyForms()
+
+        [Route("CopyLink")]
+        public IActionResult CopyLink(int? id)
+        {
+            TextCopy.ClipboardService.SetText($"https://localhost:7219/form?id={id}");
+            return RedirectToAction("MyForms", "Home", new {copy = "true"});
+        }
+
+        public async Task<IActionResult> MyForms(string? copy = "")
         {
             MyFormsViewModel model = new MyFormsViewModel();
             UserDTO user = await userManager.GetUser(User);
@@ -37,6 +45,10 @@ namespace SimpleVote.UI.Controllers
             };
             model.Pagination.CalculateQuantityPages();
             model.Pagination.CalculateQuantityPaginationContainers();
+            if (copy == "true")
+            {
+                TempData["Message"] = "Посилання на опитування успішно скопійовано";
+            }
             return View(model);
 
         }

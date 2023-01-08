@@ -17,15 +17,15 @@
 
     <form method="post" asp-controller="Form" asp-action="ParticipateSubmit" class="mt-5">
         <div class="form-border">
-            <h3>Login</h3>
+            <h3>Щоб пройти дане опитування, будь-ласка введіть своє ім'я і електронну пошту</h3>
             <input type="hidden" asp-for="FormId"/>
             
             <label asp-validation-for="Password">Ім'я</label>
-            <input type="text" asp-for="Name" placeholder="Your Password" />
+            <input type="text" asp-for="Name" placeholder="Введіть ваше ім'я" />
             <span asp-validation-for="Name" class="text-danger fw-bold d-block"></span>
 
             <label asp-validation-for="Email">Електронна пошта</label>
-            <input type="email" asp-for="Email" placeholder="Your Email" />
+            <input type="email" asp-for="Email" placeholder="Введіть вашу електронну пошту" />
             <span asp-validation-for="Email" class="text-danger fw-bold d-block"></span>
 
             <input class="button-login"type="submit" value="Прийняти участь" />

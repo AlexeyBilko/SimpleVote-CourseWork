@@ -19,19 +19,19 @@
         <div class="form-border">
             <h3>Login</h3>
 
-            <label asp-validation-for="Email">Email</label>
-            <input type="email" asp-for="Email" placeholder="Your Email" />
+            <label asp-validation-for="Email">Електронна пошта</label>
+            <input type="email" asp-for="Email" placeholder="Введіть вашу електронну пошту" />
             <span asp-validation-for="Email" class="text-danger fw-bold d-block"></span>
 
-            <label asp-validation-for="Password">Password</label>
-            <input type="password" asp-for="Password" placeholder="Your Password" />
+            <label asp-validation-for="Password">Пароль</label>
+            <input type="password" asp-for="Password" placeholder="Введіть ваш пароль" />
             <span asp-validation-for="Password" class="text-danger fw-bold d-block"></span>
 
-            <input class="button-login"type="submit" value="Log In" />
+            <input class="button-login"type="submit" value="Увійти" />
         </div>
         <div class="login-links">    
-            <div><a class="link" href="~/Account/Register">Create New Account</a></div>
-            @*add*@<div><a class="link" asp-action="EnterEmail" asp-controller="Account">I forgot my password</a></div>
+            <div><a class="link" href="~/Account/Register">Створити новий акаунт</a></div>
+            @*add*@<div><a class="link" asp-action="ForgotPassword" asp-controller="Account">Я забув пароль</a></div>
         </div>
     </form>
     <div class="text-danger mt-3 fw-bold d-block" asp-validation-summary="ModelOnly"></div>

@@ -64,6 +64,16 @@ namespace ServiceLayer.Service.Realization
 
         public Vote FromDTOtoVote(VoteDTO toConvert)
         {
+            if (toConvert.Participant == null)
+            {
+                return new Vote()
+                {
+                    Id = toConvert.Id,
+                    QuestionId = toConvert.QuestionId,
+                    SubmitedAnswer = toConvert.SubmitedAnswer,
+                    ParticipantId = -1
+                };
+            }
             return new Vote()
             {
                 Id = toConvert.Id,
