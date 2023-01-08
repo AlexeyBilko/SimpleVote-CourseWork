@@ -46,11 +46,11 @@ namespace SimpleVote.UI.Controllers
             {
                 FormId = (int)id
             };
-            return View();
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Participate(ParticipateViewModel vm)
+        public async Task<IActionResult> ParticipateSubmit(ParticipateViewModel vm)
         {
             var allowedParticipants =
                 (await participantService.GetAllAsync()).Where(x => x.FormId == vm.FormId).ToList();
@@ -63,7 +63,7 @@ namespace SimpleVote.UI.Controllers
 
             TempData["Message"] =
                 "Нажаль учасник з такою електронною поштою не може приймати участь в данному опитуванні";
-            return View(vm);
+            return RedirectToAction("Participate", "Form", new { id = vm.FormId });
         }
 
         [Route("form")]
@@ -112,7 +112,7 @@ namespace SimpleVote.UI.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Participate", "Form", new { formId = toDisplay.Id });
+                        return RedirectToAction("Participate", "Form", new { id = toDisplay.Id });
                     }
                 }
             }
@@ -147,10 +147,13 @@ namespace SimpleVote.UI.Controllers
                 }
                 else
                 {
+                    int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
+                    var participant = (await participantService.GetAllAsync()).First(x => x.Id == ParticipantId);
                     await voteService.AddAsync(new VoteDTO()
                     {
                         QuestionId = form.Questions.ToList()[i].Id,
-                        SubmitedAnswer = vm.votes[i][0]
+                        SubmitedAnswer = vm.votes[i][0],
+                        Participant = participant
                     });
                 }
             }
