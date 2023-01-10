@@ -18,7 +18,7 @@ namespace SimpleVote.UI.Controllers
 
         public AccountController(UserService userService,
             SignInService signInServcie,
-            EmailConfiguration emailConfiguration, 
+            EmailConfiguration emailConfiguration,
             IConfiguration configuration)
         {
             this.userService = userService;
@@ -31,10 +31,12 @@ namespace SimpleVote.UI.Controllers
         {
             return RedirectToAction("Login", new { returnUrl = ReturnUrl });
         }
+
         public IActionResult Login(string returnUrl)
         {
             return View();
         }
+
         public IActionResult Register()
         {
             return View();
@@ -48,30 +50,40 @@ namespace SimpleVote.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var email = (await userService.GetUser(User)).Email;
-                var res = await userService.ChangePasswordAsync(email, model.Password, model.ConfirmNewPassword);
-                if (res.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    TempData["Message"] = "Пароль успішно змінено";
+                    var email = (await userService.GetUser(User)).Email;
+                    var res = await userService.ChangePasswordAsync(email, model.Password, model.ConfirmNewPassword);
+                    if (res.Succeeded)
+                    {
+                        TempData["Message"] = "Пароль успішно змінено";
+                    }
+                    else
+                    {
+                        TempData["Message"] = "";
+                        int i = 1;
+                        foreach (var item in res.Errors)
+                        {
+                            TempData["Message"] += i.ToString() + ". " + item.Code + "\n";
+                            i++;
+                        }
+                    }
                 }
                 else
                 {
-                    TempData["Message"] = "";
-                    int i = 1;
-                    foreach (var item in res.Errors)
-                    {
-                        TempData["Message"] += i.ToString() + ". " + item.Code + "\n";
-                        i++;
-                    }
+                    TempData["Message"] = "Помилка зміни паролю";
                 }
+
+                return RedirectToAction("ForgotPassword", "Account");
             }
-            else
+            catch (Exception ex)
             {
-                TempData["Message"] = "Помилка зміни паролю";
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("ForgotPassword","Account");
         }
         //public IActionResult EnterEmail()
         //{
@@ -170,124 +182,155 @@ namespace SimpleVote.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                UserDTO user = await userService.FindByEmailAsync(model.Email);
-                if (user != null)
+                if (ModelState.IsValid)
                 {
-                    string role = await userService.GetUserRoleAsync(user.Id);
-                    var result = await signInService.SignInWithEmailAsync(model.Email, model.Password);
-                    if (result.Succeeded)
+                    UserDTO user = await userService.FindByEmailAsync(model.Email);
+                    if (user != null)
                     {
-                        return RedirectToAction("Index", "Home");
+                        string role = await userService.GetUserRoleAsync(user.Id);
+                        var result = await signInService.SignInWithEmailAsync(model.Email, model.Password);
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            TempData["Message"] = "Incorrect Login";
+                        }
                     }
                     else
                     {
                         TempData["Message"] = "Incorrect Login";
                     }
                 }
-                else
-                {
-                    TempData["Message"] = "Incorrect Login";
-                }
+
+                return View();
             }
-            return View();
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
+            }
         }
-     
-      
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]   
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                IdentityResult[] passwordValidation = await userService.ValidatePassword(model.Password);
-                if (passwordValidation[0].Succeeded)
+                if (ModelState.IsValid)
                 {
-                    if (await userService.FindByEmailAsync(model.Email) == null)
+                    IdentityResult[] passwordValidation = await userService.ValidatePassword(model.Password);
+                    if (passwordValidation[0].Succeeded)
                     {
-                        Random rand = new Random();
-                        int code = rand.Next(100000, 999999);
-
-                        EmailMessage message = new EmailMessage
+                        if (await userService.FindByEmailAsync(model.Email) == null)
                         {
-                            To = model.Email,
-                            Subject = "Veryfication Code",
-                            Content = code.ToString()
-                        };
-                        await EmailManager.SendText(emailConfiguration, message);
+                            Random rand = new Random();
+                            int code = rand.Next(100000, 999999);
 
-                        return View("ConfirmEmail", new ConfirmEmailViewModel
+                            EmailMessage message = new EmailMessage
+                            {
+                                To = model.Email,
+                                Subject = "Veryfication Code",
+                                Content = code.ToString()
+                            };
+                            await EmailManager.SendText(emailConfiguration, message);
+
+                            return View("ConfirmEmail", new ConfirmEmailViewModel
+                            {
+                                UserName = model.UserName,
+                                Email = model.Email,
+                                Password = model.Password,
+                                Code = code.ToString()
+                            });
+                        }
+                        else
                         {
-                            UserName = model.UserName,
-                            Email = model.Email,
-                            Password = model.Password,
-                            Code = code.ToString()
-                        });
+                            TempData["Message"] = "This email has already been used";
+                        }
                     }
                     else
                     {
-                        TempData["Message"]= "This email has already been used";
+                        TempData["Message"] = "";
+                        int i = 1;
+                        foreach (var item in passwordValidation[0].Errors)
+                        {
+                            TempData["Message"] += i.ToString() + ". " + item.Code + "\n";
+                            i++;
+                        }
                     }
                 }
-                else
-                {
-                    TempData["Message"] = "";
-                    int i = 1;
-                    foreach (var item in passwordValidation[0].Errors)
-                    {
-                        TempData["Message"] +=i.ToString()+". "+ item.Code + "\n";
-                        i++;
-                    }
-                }
+
+                return View();
             }
-            return View();
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model, [FromServices]IServiceProvider serviceProvider)
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model,
+            [FromServices] IServiceProvider serviceProvider)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (model.ConfirmCode == model.Code)
+                if (ModelState.IsValid)
                 {
-                    UserDTO user = new UserDTO
+                    if (model.ConfirmCode == model.Code)
                     {
-                        Email = model.Email,
-                        DisplayName = model.UserName
-                    };
-                    var result = await userService.CreateAsync(user, model.Password);
-                    if (result.Succeeded)
-                    {
-                        var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                        var roleExist = await RoleManager.RoleExistsAsync("User");
-                        if (!roleExist)
+                        UserDTO user = new UserDTO
                         {
-                            var roleResult = await RoleManager.CreateAsync(new IdentityRole("User"));
+                            Email = model.Email,
+                            DisplayName = model.UserName
+                        };
+                        var result = await userService.CreateAsync(user, model.Password);
+                        if (result.Succeeded)
+                        {
+                            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                            var roleExist = await RoleManager.RoleExistsAsync("User");
+                            if (!roleExist)
+                            {
+                                var roleResult = await RoleManager.CreateAsync(new IdentityRole("User"));
+                            }
+
+                            var roleRes = await userService.AddToRoleAsync(user.Id, "User");
+                            if (roleRes.Succeeded)
+                            {
+                                await signInService.SignInWithEmailAsync(model.Email, model.Password);
+                                return RedirectToAction("Index", "Home");
+                            }
                         }
-                        var roleRes = await userService.AddToRoleAsync(user.Id, "User");
-                        if (roleRes.Succeeded)
+                        else
                         {
-                            await signInService.SignInWithEmailAsync(model.Email, model.Password);
-                            return RedirectToAction("Index", "Home");
+                            foreach (var item in result.Errors)
+                            {
+                                ModelState.AddModelError("", item.Code);
+                            }
                         }
                     }
                     else
                     {
-                        foreach (var item in result.Errors)
-                        {
-                            ModelState.AddModelError("", item.Code);
-                        }
+                        TempData["Message"] = "Verification Error";
                     }
                 }
-                else
-                {
-                    TempData["Message"] = "Verification Error";
-                }
-            }
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public async Task<IActionResult> AppLogout()

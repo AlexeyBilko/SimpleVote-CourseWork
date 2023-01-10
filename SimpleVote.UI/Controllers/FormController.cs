@@ -47,6 +47,8 @@ namespace SimpleVote.UI.Controllers
             }
             catch (Exception ex)
             {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -55,34 +57,52 @@ namespace SimpleVote.UI.Controllers
         [Route("participate")]
         public IActionResult Participate(int? id)
         {
-            if (id == null)
+            try
             {
+                if (id == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ParticipateViewModel vm = new ParticipateViewModel()
+                {
+                    FormId = (int)id
+                };
+                return View(vm);
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
                 return RedirectToAction("Index", "Home");
             }
-
-            ParticipateViewModel vm = new ParticipateViewModel()
-            {
-                FormId = (int)id
-            };
-            return View(vm);
         }
 
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> ParticipateSubmit(ParticipateViewModel vm)
         {
-            var allowedParticipants =
-                (await participantService.GetAllAsync()).Where(x => x.FormId == vm.FormId).ToList();
-            if (allowedParticipants.Select(x => x.Email).ToList().Contains(vm.Email))
+            try
             {
-                var participant = allowedParticipants.Find(x => x.Email == vm.Email);
-                HttpContext.Session.SetString("participantId", participant.Id.ToString());
-                return RedirectToAction("Form", "Form", new { id = vm.FormId });
-            }
+                var allowedParticipants =
+                    (await participantService.GetAllAsync()).Where(x => x.FormId == vm.FormId).ToList();
+                if (allowedParticipants.Select(x => x.Email).ToList().Contains(vm.Email))
+                {
+                    var participant = allowedParticipants.Find(x => x.Email == vm.Email);
+                    HttpContext.Session.SetString("participantId", participant.Id.ToString());
+                    return RedirectToAction("Form", "Form", new { id = vm.FormId });
+                }
 
-            TempData["Message"] =
-                "Нажаль учасник з такою електронною поштою не може приймати участь в данному опитуванні";
-            return RedirectToAction("Participate", "Form", new { id = vm.FormId });
+                TempData["Message"] =
+                    "Нажаль учасник з такою електронною поштою не може приймати участь в данному опитуванні";
+                return RedirectToAction("Participate", "Form", new { id = vm.FormId });
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [AllowAnonymous]
@@ -147,10 +167,41 @@ namespace SimpleVote.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitForm(ShowFormViewModel vm)
         {
-            ShowFormViewModel _vm = new ShowFormViewModel();
-            var form = await formService.GetAsync(vm.toShow.Id);
-            if (form.Type == false)
+            try
             {
+                ShowFormViewModel _vm = new ShowFormViewModel();
+                var form = await formService.GetAsync(vm.toShow.Id);
+                if (form.Type == false)
+                {
+                    for (int i = 0; i < vm.votes.Count; i++)
+                    {
+                        string SubmitedAnswer = "";
+                        if (form.Questions.ToList()[i].Type == "2")
+                        {
+                            foreach (var item in vm.votes[i])
+                            {
+                                SubmitedAnswer += ("///" + item);
+                            }
+                        }
+                        else
+                        {
+                            SubmitedAnswer = vm.votes[i][0];
+                        }
+
+                        var part = (await participantService.GetAllAsync()).First(x => x.FormId == form.Id);
+                        await voteService.AddAsync(new VoteDTO()
+                        {
+                            QuestionId = form.Questions.ToList()[i].Id,
+                            SubmitedAnswer = SubmitedAnswer,
+                            Participant = part
+                        });
+                    }
+
+                    TempData["Message"] =
+                        "Форма Успішно надіслана";
+                    return RedirectToAction("Index", "Home");
+                }
+
                 for (int i = 0; i < vm.votes.Count; i++)
                 {
                     string SubmitedAnswer = "";
@@ -166,81 +217,80 @@ namespace SimpleVote.UI.Controllers
                         SubmitedAnswer = vm.votes[i][0];
                     }
 
-                    var part = (await participantService.GetAllAsync()).First(x => x.FormId == form.Id);
+                    int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
+                    var participant = (await participantService.GetAllAsync()).First(x => x.Id == ParticipantId);
                     await voteService.AddAsync(new VoteDTO()
                     {
                         QuestionId = form.Questions.ToList()[i].Id,
                         SubmitedAnswer = SubmitedAnswer,
-                        Participant = part
+                        Participant = participant
                     });
+                    HttpContext.Session.SetString("participantId", "");
                 }
+
                 TempData["Message"] =
                     "Форма Успішно надіслана";
                 return RedirectToAction("Index", "Home");
             }
-            for (int i = 0; i < vm.votes.Count; i++)
+            catch (Exception ex)
             {
-                string SubmitedAnswer = "";
-                if (form.Questions.ToList()[i].Type == "2")
-                {
-                    foreach (var item in vm.votes[i])
-                    {
-                        SubmitedAnswer += ("///" + item);
-                    }
-                }
-                else
-                {
-                    SubmitedAnswer = vm.votes[i][0];
-                }
-
-                int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
-                var participant = (await participantService.GetAllAsync()).First(x => x.Id == ParticipantId);
-                await voteService.AddAsync(new VoteDTO()
-                {
-                    QuestionId = form.Questions.ToList()[i].Id,
-                    SubmitedAnswer = SubmitedAnswer,
-                    Participant = participant
-                });
-                HttpContext.Session.SetString("participantId", "");
+                TempData["Message"] =
+                    "Форма була надіслана некоректно";
+                return RedirectToAction("Index", "Home");
             }
-
-            TempData["Message"] =
-                "Форма Успішно надіслана";
-            return RedirectToAction("Index", "Home");
         }
 
 
         public async Task<IActionResult> CreateQuestion(int formId)
         {
-            QuestionViewModel vm = new QuestionViewModel()
+            try
             {
-                FormId = formId,
-                Answers = new List<string>()
-            };
-            return View(vm);
+                QuestionViewModel vm = new QuestionViewModel()
+                {
+                    FormId = formId,
+                    Answers = new List<string>()
+                };
+                return View(vm);
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Вказано неіснуючий ідентифікатор форми";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateQuestion(QuestionViewModel form)
         {
-            var answers = new List<AnswerDTO>();
-            foreach (var answer in form.Answers)
+            try
             {
-                answers.Add(new AnswerDTO()
+                var answers = new List<AnswerDTO>();
+                foreach (var answer in form.Answers)
                 {
-                    Value = answer
-                });
+                    answers.Add(new AnswerDTO()
+                    {
+                        Value = answer
+                    });
+                }
+
+                var questionDTO = new QuestionDTO()
+                {
+                    Title = form.Title,
+                    Type = form.Type,
+                    FormId = form.FormId,
+                    Answers = answers,
+                    Votes = new List<VoteDTO>()
+                };
+                var res = await formService.AddQuestion(questionDTO);
+                return RedirectToAction("CreateQuestion", "Form", new { formId = form.FormId });
             }
-            var questionDTO = new QuestionDTO()
+            catch (Exception ex)
             {
-                Title = form.Title,
-                Type = form.Type,
-                FormId = form.FormId,
-                Answers = answers,
-                Votes = new List<VoteDTO>()
-            };
-            var res = await formService.AddQuestion(questionDTO);
-            return RedirectToAction("CreateQuestion", "Form", new { formId = form.FormId });
+                TempData["Message"] =
+                    "Питання не було створено через помилку";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -248,6 +298,8 @@ namespace SimpleVote.UI.Controllers
         {
             //if (ModelState.IsValid)
             //{
+            try
+            {
                 if (form != null)
                 {
                     List<ParticipantDTO> people = new List<ParticipantDTO>();
@@ -269,6 +321,7 @@ namespace SimpleVote.UI.Controllers
                             }
                         }
                     }
+
                     FormDTO _form = new FormDTO()
                     {
                         User = await userManager.GetUser(User),
@@ -289,11 +342,18 @@ namespace SimpleVote.UI.Controllers
                         FormId = res.Id
                     });
 
-                return RedirectToAction("CreateQuestion", "Form", new { formId = res.Id } );
+                    return RedirectToAction("CreateQuestion", "Form", new { formId = res.Id });
                 }
-            //}
+                //}
 
-            return RedirectToAction("CreateForm", "Form");
+                return RedirectToAction("CreateForm", "Form");
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Форма не була створена через помилку";
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

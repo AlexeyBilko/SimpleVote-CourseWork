@@ -13,6 +13,7 @@ namespace SimpleVote.UI.Controllers
 
         FormService formService;
         UserService userManager;
+
         public HomeController(FormService _formService, UserService user)
         {
             formService = _formService;
@@ -28,50 +29,79 @@ namespace SimpleVote.UI.Controllers
         [Route("CopyLink")]
         public IActionResult CopyLink(int? id)
         {
-            TextCopy.ClipboardService.SetText($"https://localhost:7219/form?id={id}");
-            return RedirectToAction("MyForms", "Home", new {copy = "true"});
+            try
+            {
+                TextCopy.ClipboardService.SetText($"https://localhost:7219/form?id={id}");
+                return RedirectToAction("MyForms", "Home", new { copy = "true" });
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public async Task<IActionResult> MyForms(string? copy = "")
         {
-            MyFormsViewModel model = new MyFormsViewModel();
-            UserDTO user = await userManager.GetUser(User);
-            int totalCount = (await formService.GetFormsbyUserId(user.Id)).Count;
-            model.UserId = user.Id;
-            model.Pagination = new PaginationModel
+            try
             {
-                TotalCount = totalCount,
-                PageSize = 3
-            };
-            model.Pagination.CalculateQuantityPages();
-            model.Pagination.CalculateQuantityPaginationContainers();
-            if (copy == "true")
-            {
-                TempData["Message"] = "Посилання на опитування успішно скопійовано";
+                MyFormsViewModel model = new MyFormsViewModel();
+                UserDTO user = await userManager.GetUser(User);
+                int totalCount = (await formService.GetFormsbyUserId(user.Id)).Count;
+                model.UserId = user.Id;
+                model.Pagination = new PaginationModel
+                {
+                    TotalCount = totalCount,
+                    PageSize = 3
+                };
+                model.Pagination.CalculateQuantityPages();
+                model.Pagination.CalculateQuantityPaginationContainers();
+                if (copy == "true")
+                {
+                    TempData["Message"] = "Посилання на опитування успішно скопійовано";
+                }
+
+                return View(model);
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
+            }
 
         }
 
         public async Task<IActionResult> MyFormsList(string userId, int pageNumber = 1)
         {
-            MyFormsListViewModel vm = new MyFormsListViewModel();
-            vm.forms = (await formService.GetFormsbyUserId(userId))
-                .Skip((pageNumber - 1) * 3)
-                .Take(3);
-            vm.UserId = userId;
-            
-            List<int> FinishedFormsIDs = new List<int>();
-            foreach (var item in vm.forms)
+            try
             {
-                if (item.Finished)
+                MyFormsListViewModel vm = new MyFormsListViewModel();
+                vm.forms = (await formService.GetFormsbyUserId(userId))
+                    .Skip((pageNumber - 1) * 3)
+                    .Take(3);
+                vm.UserId = userId;
+
+                List<int> FinishedFormsIDs = new List<int>();
+                foreach (var item in vm.forms)
                 {
-                    FinishedFormsIDs.Add(item.Id);
+                    if (item.Finished)
+                    {
+                        FinishedFormsIDs.Add(item.Id);
+                    }
                 }
+
+                vm.FinishedFormsIDs = FinishedFormsIDs;
+
+                return PartialView("MyFormsList", vm);
             }
-            vm.FinishedFormsIDs = FinishedFormsIDs;
-            
-            return PartialView("MyFormsList", vm);
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public IActionResult Privacy()
