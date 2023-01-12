@@ -33,6 +33,27 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
+
+        public async Task<IActionResult> ChangeStatus(int? id)
+        {
+
+            try
+            {
+                var form = (await formService.GetAsync((int)id));
+                form.Finished = form.Finished != true;
+                await formService.UpdateAsync(form);
+                TempData["Message"] =
+                    "Статус опитування успішно змінено!";
+                return RedirectToAction("MyForms", "Home");
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] =
+                    "Щось пішло не так :(";
+                return RedirectToAction("MyForms", "Home");
+            }
+        }
+
         public async Task<IActionResult> Report(int? id)
         {
             try
@@ -41,7 +62,8 @@ namespace SimpleVote.UI.Controllers
                 ReportViewModel vm = new ReportViewModel()
                 {
                     FormTitle = form.Name,
-                    Questions = form.Questions.ToList()
+                    Questions = form.Questions.ToList(),
+                    FormType = form.Type
                 };
                 return View(vm);
             }
@@ -112,49 +134,58 @@ namespace SimpleVote.UI.Controllers
             try
             {
                 FormDTO toDisplay = await formService.GetAsync((int)id);
-                if (toDisplay.Type == false)
+                if (toDisplay.Finished != true)
                 {
-                    List<List<string>> emptyVotes = new List<List<string>>();
-                    for (int i = 0; i < toDisplay.Questions.Count(); i++)
+                    if (toDisplay.Type == false)
                     {
-                        emptyVotes.Add(new List<string>());
-                        emptyVotes[i].Add("");
-                    }
-
-                    ShowFormViewModel vm = new ShowFormViewModel()
-                    {
-                        toShow = toDisplay,
-                        votes = emptyVotes
-                    };
-                    return View(vm);
-                }
-                else
-                {
-                    var allowedParticipants =
-                        (await participantService.GetAllAsync()).Where(x => x.FormId == toDisplay.Id).ToList();
-                    if (HttpContext.Session.GetString("participantId") != null
-                        && allowedParticipants.Select(x=>x.Id).ToList().Contains(int.Parse(HttpContext.Session.GetString("participantId"))))
-                    {
-                        int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
                         List<List<string>> emptyVotes = new List<List<string>>();
                         for (int i = 0; i < toDisplay.Questions.Count(); i++)
                         {
                             emptyVotes.Add(new List<string>());
                             emptyVotes[i].Add("");
                         }
+
                         ShowFormViewModel vm = new ShowFormViewModel()
                         {
                             toShow = toDisplay,
-                            votes = emptyVotes,
-                            Participant = allowedParticipants.Find(x=>x.Id == ParticipantId)
+                            votes = emptyVotes
                         };
                         return View(vm);
                     }
                     else
                     {
-                        return RedirectToAction("Participate", "Form", new { id = toDisplay.Id });
+                        var allowedParticipants =
+                            (await participantService.GetAllAsync()).Where(x => x.FormId == toDisplay.Id).ToList();
+                        if (HttpContext.Session.GetString("participantId") != null
+                            && allowedParticipants.Select(x => x.Id).ToList()
+                                .Contains(int.Parse(HttpContext.Session.GetString("participantId"))))
+                        {
+                            int ParticipantId = int.Parse(HttpContext.Session.GetString("participantId"));
+                            List<List<string>> emptyVotes = new List<List<string>>();
+                            for (int i = 0; i < toDisplay.Questions.Count(); i++)
+                            {
+                                emptyVotes.Add(new List<string>());
+                                emptyVotes[i].Add("");
+                            }
+
+                            ShowFormViewModel vm = new ShowFormViewModel()
+                            {
+                                toShow = toDisplay,
+                                votes = emptyVotes,
+                                Participant = allowedParticipants.Find(x => x.Id == ParticipantId)
+                            };
+                            return View(vm);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Participate", "Form", new { id = toDisplay.Id });
+                        }
                     }
                 }
+
+                TempData["Message"] =
+                    "Нажаль дане опитування було завершено його власником";
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
@@ -272,6 +303,13 @@ namespace SimpleVote.UI.Controllers
                     {
                         Value = answer
                     });
+                }
+
+                if (answers.Count < 1 && form.Type != "3" && form.Type != "4")
+                {
+                    TempData["Message"] =
+                        "Питання не було створено через помилку";
+                    return RedirectToAction("CreateQuestion", "Form", new { formId = form.FormId });
                 }
 
                 var questionDTO = new QuestionDTO()

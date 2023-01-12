@@ -87,7 +87,18 @@
                 Учасників: @form.Participants.Count().ToString()
             </div>
             <div class="form-button">
-                <button class="blue-button">Завершити опитування</button>
+                @if (form.Finished == false)
+                {
+                    <a href="~/Form/ChangeStatus?id=@form.Id">
+                        <button class="blue-button">Завершити опитування</button>
+                    </a>
+                }
+                else
+                {
+                    <a href="~/Form/ChangeStatus?id=@form.Id">
+                        <button class="blue-button">Відновити опитування</button>
+                    </a>
+                }
             </div>
         </div>
 

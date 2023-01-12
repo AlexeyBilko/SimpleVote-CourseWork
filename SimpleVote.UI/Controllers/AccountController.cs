@@ -239,7 +239,20 @@ namespace SimpleVote.UI.Controllers
                                 Subject = "Veryfication Code",
                                 Content = code.ToString()
                             };
-                            await EmailManager.SendText(emailConfiguration, message);
+                            try
+                            {
+                                await EmailManager.SendText(emailConfiguration, message);
+                            }
+                            catch
+                            {
+                                return View("ConfirmEmail", new ConfirmEmailViewModel
+                                {
+                                    UserName = model.UserName,
+                                    Email = model.Email,
+                                    Password = model.Password,
+                                    Code = code.ToString()
+                                });
+                            }
 
                             return View("ConfirmEmail", new ConfirmEmailViewModel
                             {

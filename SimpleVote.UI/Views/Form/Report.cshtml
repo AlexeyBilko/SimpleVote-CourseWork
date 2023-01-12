@@ -19,7 +19,121 @@
     <h4 class="display-4">@Model.FormTitle</h4>
     <h3><a href="~/Home/MyForms">Back</a></h3>
     <h5>Всього учасників: @Model.Questions[0].Votes.ToList().Count</h5>
-    @foreach (var item in Model.Questions)
+    @if (Model.FormType == true)
+    {
+        <h5>Групове опитування</h5>
+        @foreach (var item in Model.Questions)
+    {
+        <h5>@item.Title</h5>
+        <h6>Тип питання: @item.Type</h6>
+        @if (item.Type == "3" || item.Type == "4")
+        {
+            @foreach (var i in item.Votes)
+            {
+                <div>@i.Participant.Email (@i.Participant.Name) -> @i.SubmitedAnswer</div>
+            }
+        }
+        else
+        {
+            @foreach (var i in item.Answers)
+            {
+                <div>@i.Value</div>
+            }
+            <div class="card">
+                <div class="card-header">
+                    <div class="chart">
+                        <canvas id="polarChart-@item.Id"></canvas>
+                    </div>
+                </div>
+            </div>
+            <script>
+
+                var polarChartCanvas = document.getElementById("polarChart-@item.Id");
+                
+                var answers = [];
+                var score = [];
+
+                @foreach (var _item in item.Answers)
+                {
+                    int currScore = 0;
+                    if (item.Type == "2")
+                    {
+                        var votes = item.Votes;
+                        foreach (var vote in votes)
+                        {
+                            var strs = vote.SubmitedAnswer.Split("///");
+                            foreach (var str in strs)
+                            {
+                                if (str == _item.Value)
+                                {
+                                    currScore++;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        currScore = item.Votes.Where(x => x.SubmitedAnswer == _item.Value).Count();
+                    }
+                    @:var currscore = @currScore;
+                    @:var str = "@_item.Value";
+                    @:var newstr = decodeHTMLEntities(str);
+                    @:answers.push(newstr);
+                    @:score.push(currscore);
+                }
+                
+
+                var doughnutChart = new Chart(polarChartCanvas, {
+                    type: 'polarArea',
+                    data: {
+                        labels: answers,
+                    datasets: [{
+                        data: score,
+                        borderWidth: 0,
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(157, 230, 41)',
+                            'rgb(41, 224, 230)',
+                            'rgb(255, 255, 0)'
+                        ],
+                        hoverBackgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(157, 230, 41)',
+                            'rgb(41, 224, 230)',
+                            'rgb(255, 255, 0)'
+                        ]
+                    }]
+                },
+                    options: {
+                        scale: {
+                            ticks: {
+                                display: true,
+                                stepSize: 1
+                            }
+                        },
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                boxWidth: 11,
+                                fontColor: "#757681",
+                                fontSize: 11
+                            }
+                        }
+                    }
+                });
+            
+            
+            
+            </script>
+        }
+    }
+    }
+    else
+    {
+        <h5>Анонімне опитування</h5>
+        @foreach (var item in Model.Questions)
     {
         <h5>@item.Title</h5>
         <h6>Тип питання: @item.Type</h6>
@@ -126,4 +240,6 @@
             </script>
         }
     }
+    }
+    
 </div>

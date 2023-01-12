@@ -1,5 +1,7 @@
 ﻿@model SimpleVote.UI.Models.ViewModels.MyFormsViewModel
 @using Microsoft.AspNetCore.Mvc.Razor;
+@using DomainLayer.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Home Page";
     if (User.IsInRole("User")) 
@@ -16,6 +18,32 @@
     <link rel="stylesheet" href="~/css/pagination.css" asp-append-version="true" />
     <link href='https://fonts.googleapis.com/css?family=Prompt' rel='stylesheet'>
 </head>
-    @await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")
+@await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")
 
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="text-center">
+            <a class="red-button me-auto ms-auto" asp-controller="Account" asp-action="AppLogout">Вийти з облікового запису</a>
+        </div>
+    }
+<div class="main-text">
+    <div class="front-message">
+        <div class="front-message-text">
+            <div class="gradient-text">
+                <h1>Веб-застосунок для створення і проведення опитувань</h1>
+            </div>
+            <div>Дякуємо, що обрали нас!</div>
 
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a href="~/Home/MyForms" class="use-button w-50" style="font-size: 12px !important;">Створити нове опитування</a>
+            }
+            else{
+                <a href="~/Account/Register" class="use-button w-50">Створити новий акаунт</a>
+            }
+        </div>
+        <div class="front-message-image">
+            <img src="~/images/mainimage.jpg" alt="Main LeadSub Image"/>
+        </div>
+    </div>
+</div>
