@@ -36,7 +36,6 @@ namespace SimpleVote.UI.Controllers
 
         public async Task<IActionResult> ChangeStatus(int? id)
         {
-
             try
             {
                 var form = (await formService.GetAsync((int)id));
@@ -49,7 +48,7 @@ namespace SimpleVote.UI.Controllers
             catch (Exception ex)
             {
                 TempData["Message"] =
-                    "Щось пішло не так :(";
+                    "Зараз статус опитування не може бути змінений!";
                 return RedirectToAction("MyForms", "Home");
             }
         }
@@ -58,6 +57,12 @@ namespace SimpleVote.UI.Controllers
         {
             try
             {
+                if (User.IsInRole("User") == false)
+                {
+                    TempData["Message"] =
+                        "Нажаль у вас немає доступу до цієї сторінки, будь-ласка зареєструйтеся або увійдіть в свій облікови запис";
+                    return RedirectToAction("Index", "Home");
+                }
                 var form = (await formService.GetAsync((int)id));
                 ReportViewModel vm = new ReportViewModel()
                 {
@@ -202,6 +207,12 @@ namespace SimpleVote.UI.Controllers
             {
                 ShowFormViewModel _vm = new ShowFormViewModel();
                 var form = await formService.GetAsync(vm.toShow.Id);
+                if (vm.votes.Count != form.Questions.Count())
+                {
+                    TempData["Message"] =
+                        "Потрібно відповісти на всі питання";
+                    return RedirectToAction("Form", "Form", new { id = form.Id });
+                }
                 if (form.Type == false)
                 {
                     for (int i = 0; i < vm.votes.Count; i++)
@@ -276,6 +287,12 @@ namespace SimpleVote.UI.Controllers
         {
             try
             {
+                if (User.IsInRole("User") == false)
+                {
+                    TempData["Message"] =
+                        "Нажаль у вас немає доступу до цієї сторінки, будь-ласка зареєструйтеся або увійдіть в свій облікови запис";
+                    return RedirectToAction("Index", "Home");
+                }
                 QuestionViewModel vm = new QuestionViewModel()
                 {
                     FormId = formId,

@@ -18,7 +18,7 @@
         display: inline-block;
     }
 </style>
-
+@await Html.PartialAsync("~/Views/Shared/ModalMessage.cshtml")
 <h2>@Model.toShow.Name</h2>
 <form class="mb-5" method="post" id="contactForm" asp-action="SubmitForm" asp-controller="Form" enctype="multipart/form-data">
     <input type="hidden" asp-for="toShow.Id"/>
@@ -66,5 +66,5 @@
             </select>
         }
     }
-    <input type="submit" value="Надіслати">
+    <input type="submit" value="Завершити проходження опитування">
 </form>

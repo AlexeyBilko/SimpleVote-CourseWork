@@ -1,3 +1,4 @@
+using System.Net;
 using LeadSub.Models;
 using ServiceLayer.Extensions;
 
@@ -46,6 +47,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
+
+app.UseStatusCodePages(context => {
+    var response = context.HttpContext.Response;
+    if (response.StatusCode == (int)HttpStatusCode.Unauthorized ||
+        response.StatusCode == (int)HttpStatusCode.Forbidden)
+        response.Redirect("/Account/Login");
+    if (response.StatusCode == 404)
+        response.Redirect("/error");
+    if (response.StatusCode == 500)
+        response.Redirect("/Home/Index");
+    return Task.CompletedTask;
+});
 
 app.UseAuthentication();
 app.UseAuthorization();

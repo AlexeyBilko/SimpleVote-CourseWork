@@ -25,6 +25,12 @@ namespace SimpleVote.UI.Controllers
             return View();
         }
 
+        [Route("error")]
+        public IActionResult NotFoundPage()
+        {
+            return View();
+        }
+
 
         [Route("CopyLink")]
         public IActionResult CopyLink(int? id)
@@ -46,6 +52,12 @@ namespace SimpleVote.UI.Controllers
         {
             try
             {
+                if (User.IsInRole("User") == false)
+                {
+                    TempData["Message"] =
+                        "Нажаль у вас немає доступу до цієї сторінки, будь-ласка зареєструйтеся або увійдіть в свій облікови запис";
+                    return RedirectToAction("Index", "Home");
+                }
                 MyFormsViewModel model = new MyFormsViewModel();
                 UserDTO user = await userManager.GetUser(User);
                 int totalCount = (await formService.GetFormsbyUserId(user.Id)).Count;

@@ -84,7 +84,7 @@
                 </a>
             </div>
             <div class="form-participants">
-                Учасників: @form.Participants.Count().ToString()
+                Учасників: @form.Questions.ToList()[0].Votes.Count()@*Participants.Count().ToString())*@
             </div>
             <div class="form-button">
                 @if (form.Finished == false)
@@ -101,65 +101,6 @@
                 }
             </div>
         </div>
-
-        @*<div class="subpage-card">
-            <div>
-                <div class="@(isBlock?"block-area-title":"white-area-title")">
-                    <h3 class="text-left arial-bold-text" style="font-family: 'Arial' !important; font-weight: 700 !important; font-size:19px">@form.Name</h3>
-                </div>
-                <div class="d-flex flex-wrap">
-                    <div class="white-area" style="width:30%;">
-                        <div class="text-left arial-bold-text" style="font-family: 'Arial' !important; font-weight: 700 !important; font-size:16px;">Total Participants: @form.Participants.Count().ToString()</div>
-                        <div class="text-left arial-bold-text" style="font-family: 'Arial' !important; font-weight: 700 !important; font-size:16px;color:#288A26;">Info</div>
-                    </div>
-                    <div class="white-area" style="width:45%;">
-                    </div>
-                </div>
-                <h5 class="mt-4" style="font-family: 'Prompt' !important; font-size:16px; margin-left: 20px;">Type: @($"{form?.Type}")</h5>
-            </div>
-
-            <div class="center-btn-crud d-flex flex-wrap">
-                <a style="border: none; margin-left: 0px;" class="crud-btn" onclick="window.open('@Url.Action($"CreateForm","Form", new {id=form?.Id})')">
-                    <img src="~/images/view_subpage.png" width=35 height=35/>
-
-                </a>
-                <a style="border: none; margin-left: 0px; margin-top: 10px;" class="crud-btn" href="/SubPages/CreateSubPage?subPageId=@form.Id&userId=@Model.UserId">
-                    <img src="~/images/edit_subpage.png" width=35 height=35/>
-                </a>
-                <button style="border: none; margin-left: -5px;" class="crud-btn" data-bs-toggle="modal" data-bs-target="#@($"modal{form.Id}")">
-                    <img src="~/images/remove-img.png" width=35 height=35/>
-                </button> 
-
-                <div class="modal fade" id="@($"modal{form.Id}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-header">Повідомлення</h5>
-                                <button type="button" class="close-btn mb-3" id="close-btn" onclick="closeModalWindow(this)" data-bs-dismiss="modal">X</button>
-                            </div>
-                            <div class="modal-body">
-                                    <p class="ms-3 mb-5">Ви впевнені?</p>
-                                    <form method="post" asp-action="CreateForm" asp-controller="Form">
-                                        <input value="@form.Id" type="hidden" name="Id">
-                                        <input type="submit" value="Так" class="ok-button mx-auto" data-bs-dismiss="modal">
-                                    </form>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>*@
+        
     }
 }
-@*else
-{
-
-       <div class="container-fluid col-xxl-3">
-           <button class="blue-button">Створити оптування</button>
-       </div>
-       
-
-        
-}*@
